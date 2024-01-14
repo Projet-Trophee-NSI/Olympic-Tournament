@@ -98,16 +98,16 @@ def sendEmail():
     # Paramètres du serveur SMTP
     smtp_server = "smtp.free.fr"
     smtp_port = 587
-    smtp_username = "titouan.dorier@free.fr"
-    smtp_password = "non"
+    smtp_username = "..."
+    smtp_password = "..."
 
     # Destinataire et expéditeur
     from_address = smtp_username
     to_address = mail
 
     # Création du message
-    subject = "teste appli envoie mail"
-    body = "Eureka ça marche\nTu as vu ça Antoine ??"
+    subject = "subject"
+    body = "body"
     message = MIMEMultipart()
     message['From'] = from_address
     message['To'] = to_address

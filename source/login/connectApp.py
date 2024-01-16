@@ -2,11 +2,19 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QWidget
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.uic import loadUi
 import os
+import sys
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 localPath = os.path.dirname(os.path.abspath(__file__))
+
+###import makeRequest
+
+sys.path.insert(0, localPath + "/../database")
+
+import makeRequest
+
 
 class MonApplication(QMainWindow):
     def __init__(self):
@@ -50,10 +58,11 @@ def getIdPassword():
     """
     Fonction qui renvoie l'identifiant et le mot de passe saisis par l'utilisateur
     """
-    id = fenetre.windowContent.idLineEdit.text() #affecte à id le texte de l'entrer de texte idLineEdit
+    id_ = fenetre.windowContent.idLineEdit.text() #affecte à id le texte de l'entrer de texte idLineEdit
     password = fenetre.windowContent.passwordLineEdit.text()
-    print(id, password)
-    return(id, password)
+    print(id_, password)
+    print(str(makeRequest.connect(password, id_)))
+    return(id_, password)
 
 def seePasswordPage1():
     """

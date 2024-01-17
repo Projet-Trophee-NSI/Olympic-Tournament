@@ -34,7 +34,7 @@ def connect (m : str, u : str):
     a = cur.execute ("SELECT mdp FROM user WHERE user= ? ", val)
     a = a.fetchone()
     if a == None:
-        return False
+        return False, None, None
     else :
         if a[0] == m :
             b = cur.execute("SELECT id, admin FROM user WHERE user= ? AND mdp= ?", (u, m))
@@ -46,7 +46,7 @@ def connect (m : str, u : str):
         else :
             con.commit()
             con.close()
-            return False
+            return False, None, None
     
 
 def modife_donne (i : str,v : str,ch):

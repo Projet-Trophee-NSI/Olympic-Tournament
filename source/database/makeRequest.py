@@ -1,8 +1,5 @@
 import sqlite3 
 from datetime import*
-import os
-
-localPathbd = os.path.dirname(os.path.abspath(__file__))
 
 
 '''
@@ -13,14 +10,22 @@ con.commit()
 con.close()
 '''
 
-def inscri_donne (a : str,b : str, d : int, c = datetime.today().strftime('%d-%m-%Y'), oto = 0):
-    '''a est l'identifient, b est le mdp, c est la date et d est sont nb de point/ argent on vera'''
-    con = sqlite3.connect(localPathbd + "/storage.db")
+def inscri_donne (u : str,m : str, p = 0, d = datetime.today().strftime('%d-%m-%Y'), r = 0):
+    '''u est l'identifient, m est le mdp, d est la date et p est sont nb de point/ argent on vera'''
+    con = sqlite3.connect("storage.db")
     cur = con.cursor()
-    val = (None, a, b, c, d, oto)
-    cur.execute ("INSERT INTO user VALUES(?,?,?,?,?,?)", val)
-    con.commit()
-    con.close()
+    a = cur.execute ("SELECT user FROM user WHERE user= ? ", (u,))
+    a = a.fetchone()
+    if a == None :
+        val = (None, u, m, d, p, r)
+        cur.execute ("INSERT INTO user VALUES(?,?,?,?,?,?)", val)
+        con.commit()
+        con.close()
+        return True
+    else :
+        con.commit()
+        con.close()
+        return False
 
 
 def connect (m : str, u : str):
@@ -28,13 +33,13 @@ def connect (m : str, u : str):
     en plus j'ai rajouté une id qui s'auto incrémente comme ça une fois l'utilisateur connecter ou pourra directement 
     récupérer ces info avec l'id que l'on aura stocke quelque part
     La fonction retourne : acces ou pas/ l'id de l'utilisateur / 1 si admin et 0 si utilisateur'''
-    con = sqlite3.connect(localPathbd + "/storage.db")
+    con = sqlite3.connect("storage.db")
     cur = con.cursor()
     val = (u,)
     a = cur.execute ("SELECT mdp FROM user WHERE user= ? ", val)
     a = a.fetchone()
     if a == None:
-        return False, None, None
+        return False
     else :
         if a[0] == m :
             b = cur.execute("SELECT id, admin FROM user WHERE user= ? AND mdp= ?", (u, m))
@@ -46,7 +51,7 @@ def connect (m : str, u : str):
         else :
             con.commit()
             con.close()
-            return False, None, None
+            return False
     
 
 def modife_donne (i : str,v : str,ch):
@@ -54,7 +59,7 @@ def modife_donne (i : str,v : str,ch):
     i : id utilisateur
     v : nouvelle valeur
     ch : valeur à modifier '''
-    con = sqlite3.connect(localPathbd + "/storage.db")
+    con = sqlite3.connect("storage.db")
     cur = con.cursor()
     val = (i,v)
     if ch=="mdp":
@@ -67,7 +72,7 @@ def modife_donne (i : str,v : str,ch):
     con.close()
 
 def suprime_donne(i:int):
-    con = sqlite3.connect(localPathbd + "/storage.db")
+    con = sqlite3.connect("storage.db")
     cur = con.cursor()
     val = (i,)
     cur.execute ("DELETE FROM user WHERE id=?", val)
@@ -79,7 +84,7 @@ def suprime_donne(i:int):
 a = connect("admin", "Lucas")
 print(a)
 '''
-con = sqlite3.connect(localPathbd + "/storage.db")
+con = sqlite3.connect("storage.db")
 cur = con.cursor()
 
 

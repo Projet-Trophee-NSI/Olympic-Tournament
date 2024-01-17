@@ -1,4 +1,5 @@
 import sqlite3 
+import os
 from datetime import*
 
 
@@ -12,7 +13,7 @@ con.close()
 
 def inscri_donne (u : str,m : str, p = 0, d = datetime.today().strftime('%d-%m-%Y'), r = 0):
     '''u est l'identifient, m est le mdp, d est la date et p est sont nb de point/ argent on vera'''
-    con = sqlite3.connect("storage.db")
+    con = sqlite3.connect(localPath + "/storage.db")
     cur = con.cursor()
     a = cur.execute ("SELECT user FROM user WHERE user= ? ", (u,))
     a = a.fetchone()
@@ -33,7 +34,7 @@ def connect (m : str, u : str):
     en plus j'ai rajouté une id qui s'auto incrémente comme ça une fois l'utilisateur connecter ou pourra directement 
     récupérer ces info avec l'id que l'on aura stocke quelque part
     La fonction retourne : acces ou pas/ l'id de l'utilisateur / 1 si admin et 0 si utilisateur'''
-    con = sqlite3.connect("storage.db")
+    con = sqlite3.connect(localPath + "/storage.db")
     cur = con.cursor()
     val = (u,)
     a = cur.execute ("SELECT mdp FROM user WHERE user= ? ", val)
@@ -59,7 +60,7 @@ def modife_donne (i : str,v : str,ch):
     i : id utilisateur
     v : nouvelle valeur
     ch : valeur à modifier '''
-    con = sqlite3.connect("storage.db")
+    con = sqlite3.connect(localPath + "/storage.db")
     cur = con.cursor()
     val = (i,v)
     if ch=="mdp":
@@ -72,7 +73,7 @@ def modife_donne (i : str,v : str,ch):
     con.close()
 
 def suprime_donne(i:int):
-    con = sqlite3.connect("storage.db")
+    con = sqlite3.connect(localPath + "/storage.db")
     cur = con.cursor()
     val = (i,)
     cur.execute ("DELETE FROM user WHERE id=?", val)
@@ -80,3 +81,4 @@ def suprime_donne(i:int):
     con.close()
 
 
+localPath = os.path.dirname(os.path.abspath(__file__))

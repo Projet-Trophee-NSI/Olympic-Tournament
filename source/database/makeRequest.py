@@ -80,16 +80,3 @@ def suprime_donne(i:int):
     con.close()
 
 
-'''
-a = connect("admin", "Lucas")
-print(a)
-'''
-con = sqlite3.connect("storage.db")
-cur = con.cursor()
-
-
-a = cur.execute("SELECT * FROM user")
-a = a.fetchall()
-print(a)
-con.commit()
-con.close()

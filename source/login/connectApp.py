@@ -40,7 +40,7 @@ class MonApplication(QMainWindow):
         self.windowContent.registrationPushButtonPage2.setStyleSheet("color: rgb(0, 0, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;\nbackground-color: rgb(99, 99, 99);\nborder: 2px solid rgb(2, 20, 56);")
         
         ## Connexion des bouton avec leurs fonctions respectives (début) ##
-        self.windowContent.connectPushButton.clicked.connect(getIdPassword)
+        self.windowContent.connectPushButton.clicked.connect(connectApp)
         self.windowContent.seePasswordPushButton.clicked.connect(seePasswordPage1)
         self.windowContent.seePasswordPushButtonPage2.clicked.connect(seePasswordPage2)
         self.windowContent.registrationPushButton.clicked.connect(lambda: fenetre.windowContent.stackedWidget.setCurrentIndex(1))
@@ -60,8 +60,6 @@ def getIdPassword():
     """
     id_ = fenetre.windowContent.idLineEdit.text() #affecte à id le texte de l'entrer de texte idLineEdit
     password = fenetre.windowContent.passwordLineEdit.text()
-    print(id_, password)
-    print(str(makeRequest.connect(password, id_)))
     return(id_, password)
 
 def seePasswordPage1():
@@ -98,8 +96,8 @@ def getRegister():
     pseudo = fenetre.windowContent.pseudoLineEditPage2.text()
     password = fenetre.windowContent.passwordLineEditPage2.text()
     e_mail = fenetre.windowContent.idLineEditPage2.text()
-    print(pseudo, e_mail, password)
-    return (pseudo, e_mail, password)
+    if makeRequest.inscri_donne(pseudo, password) == True: print("oui")
+    else: print("non")
 
 def sendEmail():
     mail = fenetre.windowContent.emailLineEditPage3.text()
@@ -132,9 +130,15 @@ def sendEmail():
         server.sendmail(from_address, to_address, message.as_string())
     print(mail)
 
+def connectApp():
+    con = getIdPassword()
+    if makeRequest.connect(con[1], con[0])[0] == True: print("yes")
+    else: print(con)
 
 
 if __name__ == '__main__': #<- comprend pas
+    os.system("cls")
+    makeRequest.affichBD()
     app = QApplication([]) #<- comprend pas
     fenetre = MonApplication()
     fenetre.setFixedSize(348, 505)

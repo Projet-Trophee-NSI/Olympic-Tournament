@@ -91,5 +91,8 @@ def affichBD():
     con.close()
     print(res)
 
+### coucou
+
 
 localPathbd = os.path.dirname(os.path.abspath(__file__))
+

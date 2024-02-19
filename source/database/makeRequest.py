@@ -2,24 +2,29 @@ import sqlite3
 import os
 from datetime import*
 
+localPathbd = os.path.dirname(os.path.abspath(__file__))
 
-'''
-con = sqlite3.connect("storage.db")
-cur = con.cursor()
-cur.execute()"CREATE TABLE user(id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, user VARCHAR, mdp VARCHAR, date_cr DATE, res_pari INT)")
-con.commit()
-con.close()
-'''
+#### Pour faire des test
+# con = sqlite3.connect("storage.db")
+# cur = con.cursor()
+# cur.execute("DROP TABLE tournoie")
+# con.commit()
+# con.close()
 
-def inscri_donne (u : str,m : str, d = datetime.today().strftime('%d-%m-%Y'), p = 0, r = 0):
-    '''u est l'identifient, m est le mdp, d est la date et p est sont nb de point/ argent on vera'''
+def inscri_donne (u : str,m : str, e : str, d = datetime.today().strftime('%d-%m-%Y')):
+    '''
+    u est l'identifient, m est le mdp, e est le mail, d est la date de création du compte
+    u -> str
+    m -> str
+    d -> str
+    '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     a = cur.execute("SELECT user FROM user WHERE user= ? ", (u,))
     a = a.fetchone()
     if a == None :
-        val = (None, u, m, d, p, r)
-        cur.execute("INSERT INTO user VALUES(?,?,?,?,?,?)", val)
+        val = (None, u, m, e, d)
+        cur.execute("INSERT INTO user VALUES(?,?,?,?,?)", val)
         con.commit()
         con.close()
         return True
@@ -30,10 +35,12 @@ def inscri_donne (u : str,m : str, d = datetime.today().strftime('%d-%m-%Y'), p 
 
 
 def connect (m : str, u : str):
-    '''m est le mdp de l'utilisateur et u sont identifient
-    en plus j'ai rajouté une id qui s'auto incrémente comme ça une fois l'utilisateur connecter ou pourra directement 
-    récupérer ces info avec l'id que l'on aura stocke quelque part
-    La fonction retourne : acces ou pas/ l'id de l'utilisateur / 1 si admin et 0 si utilisateur'''
+    '''
+    m est le mdp de l'utilisateur et u sont identifient
+    La fonction retourne : acces ou pas/ l'id de l'utilisateur / 1 si admin et 0 si utilisateur
+    m -> str
+    u -> str
+    '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     val = (u,)
@@ -55,14 +62,16 @@ def connect (m : str, u : str):
             return False,
     
 
-def modife_donne (i : str,v : str,ch):
-    '''modifie les donner choisie:
-    i : id utilisateur
-    v : nouvelle valeur
-    ch : valeur à modifier '''
+def modife_donne (i : int,v : str,ch : str):
+    '''
+    modifie les donner choisie:
+    i : id utilisateur -> int
+    v : nouvelle valeur -> str
+    ch : valeur à modifier -> str
+    '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (i,v)
+    val = (v,i)
     if ch=="mdp":
         cur.execute("UPDATE user SET mdp=? WHERE id= ?", val)
     elif ch=="mail":
@@ -73,6 +82,10 @@ def modife_donne (i : str,v : str,ch):
     con.close()
 
 def suprime_donne(i:int):
+    """
+    Supprime un utilisateur de la table user
+    i -> int
+    """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     val = (i,)
@@ -80,19 +93,67 @@ def suprime_donne(i:int):
     con.commit()
     con.close()
 
-def affichBD():
-    
+def cree_tournoie(u,n,p,np,nt):
+    '''
 
+    '''
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    a = cur.execute("SELECT user FROM user WHERE user= ? ", (u,))
+    a = a.fetchone()
+    if a == None :
+        val = (None,n,p,np,nt)
+        cur.execute("INSERT INTO user VALUES(?,?,?,?,?)", val)
+        con.commit()
+        con.close()
+        return True
+    else :
+        con.commit()
+        con.close()
+        return False
+
+def convertSTRtoLst(ch):
+    listeFinal=[]
+    tempo=''
+    for e in ch:
+        if e=='[':
+            newListe=[]
+        elif e==']':
+            newListe.append(tempo)
+            listeFinal.append(newListe)
+            tempo=''
+        elif e=='/':
+            newListe.append(tempo)
+            tempo=''
+        else:
+            tempo+=e
+    return listeFinal
+
+## "[a/b/c/d]"
+## [[a,b,c,d,m],[],[],[]]
+
+def convertLsttoSTR(liste):
+    pass
+
+#### Fonctions d'aide à la comprehension
+def affichTableUser():
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     cur.execute("SELECT * FROM user")
     res = cur.fetchall()
     con.commit()
     con.close()
-    print(res)
+    for e in res:
+        print(e)
 
+def affichTableTournoi():
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM tournoie")
+    res = cur.fetchall()
+    con.commit()
+    con.close()
+    for e in res:
+        print(e)
 
-
-
-localPathbd = os.path.dirname(os.path.abspath(__file__))
-
+affichTableUser()

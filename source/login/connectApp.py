@@ -12,8 +12,10 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 ###import makeRequest
 
 sys.path.insert(0, localPath + "/../database")
+sys.path.insert(0, localPath + "/../tools")
 
 import makeRequest
+import hash
 
 
 class MonApplication(QMainWindow):
@@ -54,7 +56,7 @@ class MonApplication(QMainWindow):
         self.windowContent.emailPushButtonPage3.clicked.connect(sendEmail)
         ## Connexion des bouton avec leurs fonctions respectives (fin) ##
 
-def getIdPassword() -> tuple(str, str):
+def getIdPassword() -> tuple:
     """
     Fonction qui renvoie l'identifiant et le mot de passe saisis par l'utilisateur
     """
@@ -109,7 +111,7 @@ def getRegister() -> None:
     email = connectAppWindow.windowContent.idLineEditPage2.text()
     
     if(pseudo != "" and password != "" and email != ""):
-        if makeRequest.inscri_donne(pseudo, password, email) == True:
+        if makeRequest.inscri_donne(pseudo, hash.hash(password), email) == True:
             displayMessageBox(2, "Inscription réussie", "Votre inscription est réussie, vous pouvez dès maintenant vous connecter via la page de connexion.")
         else:
             displayMessageBox(4, "Erreur d'inscription", "Votre inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")
@@ -152,7 +154,7 @@ def connectApp() -> None:
     Procédure qui gère la connexion à l'application, si les données saisies sont correctes, on ferme la fenêtre de connexion et on lance l'application
     """
     con = getIdPassword()
-    requestResult = makeRequest.connect(con[1], con[0])
+    requestResult = makeRequest.connect(hash.hash(con[1]), con[0])
     print(requestResult)
     if requestResult[0] == True:
         tempConnectionFile = open(localPath + "/../application/temp.tmp", "w")

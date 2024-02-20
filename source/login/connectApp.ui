@@ -31,8 +31,8 @@
    <string>Page de connexion</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(80, 80, 80);
-background-color: rgb(2, 20, 56);</string>
+   <string notr="true">background-color: rgb(2, 20, 56);
+background-color: rgb(8, 26, 62);</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_4">
    <item>
@@ -182,7 +182,7 @@ border-radius: 7px;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);
-border: 2px solid rgb(2, 20, 56);
+border: 2px solid rgb(8, 26, 62);
 border-radius: 7px;</string>
            </property>
            <property name="text">
@@ -481,7 +481,7 @@ border-radius: 7px;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 255, 255);
-border: 2px solid rgb(2, 20, 56);
+border: 2px solid rgb(8, 26, 62);
 border-radius: 7px;</string>
            </property>
            <property name="text">

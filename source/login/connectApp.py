@@ -6,6 +6,7 @@ import sys
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import ctypes
 
 localPath = os.path.dirname(os.path.abspath(__file__))
 
@@ -200,6 +201,14 @@ def displayMessageBox(typeOfMessage: int, title: str, text: str) -> None:
 if __name__ == '__main__':
     os.system("cls")
     app = QApplication([])
+    
+    ## Forcer l'icône de la barre des tâche (début) ##
+    # Provient de : https://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
+    myappid = 'mycompany.myproduct.subproduct.version'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+    app.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.ico"))
+    ## Forcer l'icône de la barre des tâche (fin) ##
+    
     connectAppWindow = MonApplication()
     connectAppWindow.setFixedSize(348, 505)
     connectAppWindow.show() 

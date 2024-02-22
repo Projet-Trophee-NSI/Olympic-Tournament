@@ -1,4 +1,8 @@
 import os
 import subprocess
 
-subprocess.call(["python", os.path.dirname(os.path.abspath(__file__)) + "/login/connectApp.py"])
+localPath = os.path.dirname(os.path.abspath(__file__))
+if(os.path.isfile(localPath + "\\database\\storage.db") and os.path.isfile(localPath + "\\login\\connectApp.py")):
+    subprocess.call(["python", localPath + "\\login\\connectApp.py"])
+else:
+    print("ERREUR : fichiers manquants\nRequis :\n- 'database\\storage.db'\n- 'login\\connectApp.py'")

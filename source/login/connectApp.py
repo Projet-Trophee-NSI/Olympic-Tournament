@@ -17,6 +17,7 @@ sys.path.insert(0, localPath + "/../tools")
 
 import makeRequest
 import hash
+import displayMessageBox as message
 
 
 class MonApplication(QMainWindow):
@@ -85,7 +86,7 @@ def checkConditions() -> None:
     """
     Procédure vérifiant si les deux checkBox nécéssaires sont cochées pour auoriser l'inscription en rendant le bouton cliquable
     """
-    if(connectAppWindow.windowContent.acceptAgeCheckBoxPage2.isChecked() and connectAppWindow.windowContent.acceptCheckBoxPage2.isChecked() and (getAge() >= 18)):
+    if(connectAppWindow.windowContent.acceptAgeCheckBoxPage2.isChecked() and connectAppWindow.windowContent.acceptCheckBoxPage2.isChecked() and (getAge() >= 15)):
         connectAppWindow.windowContent.registrationPushButtonPage2.setEnabled(True)
         connectAppWindow.windowContent.registrationPushButtonPage2.setStyleSheet("color: rgb(0, 0, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
 
@@ -110,14 +111,15 @@ def getRegister() -> None:
     pseudo = connectAppWindow.windowContent.pseudoLineEditPage2.text()
     password = connectAppWindow.windowContent.passwordLineEditPage2.text()
     email = connectAppWindow.windowContent.idLineEditPage2.text()
+    age = connectAppWindow.windowContent.ageSpinBoxPage2.value()
     
     if(pseudo != "" and password != "" and email != ""):
-        if makeRequest.inscri_donne(pseudo, hash.hash(password), email) == True:
-            displayMessageBox(2, "Inscription réussie", "Votre inscription est réussie, vous pouvez dès maintenant vous connecter via la page de connexion.")
+        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 0) == True:
+            message.displayMessageBox(2, "Inscription réussie", "Votre inscription est réussie, vous pouvez dès maintenant vous connecter via la page de connexion.")
         else:
-            displayMessageBox(4, "Erreur d'inscription", "Votre inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")
+            message.displayMessageBox(4, "Erreur d'inscription", "Votre inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")
     else:
-        displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
+        message.displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
 
 def sendEmail() -> None:
     mail = connectAppWindow.windowContent.emailLineEditPage3.text()
@@ -155,48 +157,15 @@ def connectApp() -> None:
     Procédure qui gère la connexion à l'application, si les données saisies sont correctes, on ferme la fenêtre de connexion et on lance l'application
     """
     con = getIdPassword()
-    requestResult = makeRequest.connect(hash.hash(con[1]), con[0])
+    requestResult = makeRequest.connect(con[0], hash.hash(con[1]))
     print(requestResult)
     if requestResult[0] == True:
         tempConnectionFile = open(localPath + "/../application/temp.tmp", "w")
-        tempConnectionFile.write(str(requestResult[1]) + ";" + str(requestResult[2])) ## RAJOUTER MAIL
+        tempConnectionFile.write(str(requestResult[1]) + ";" + str(requestResult[2]) + ";" + str(con[0]) + ";" + str(hash.hash(con[1]))) ## RAJOUTER MAIL
         tempConnectionFile.close()
         connectAppWindow.close()
     else:
-        displayMessageBox(4, "Echec de la connexion", "Vos informations sont incorrectes, vérifiez votre identifiant et votre mot de passe.")
-
-def displayMessageBox(typeOfMessage: int, title: str, text: str) -> None:
-    """
-    Procédure qui affiche un QMessageBox en fonction des paramètres saisies 
-
-    Args:
-        typeOfMessage (int): le type du QMessageBox
-                                1 -> question
-                                2 -> information
-                                3 -> faire attention
-                                4 -> situation bloquante
-        title (str): le titre de la fenêtre
-        text (str): le texte contenu dans la fenêtre
-    """
-    assert(type(typeOfMessage) == int), "Erreur de type pour 'typeOfMessage' (requis: int)"
-    assert(type(title) == str), "Erreur de type pour 'title' (requis: str)"
-    assert(type(text) == str), "Erreur de type pour 'text' (requis: str)"
-    
-    msgBox = QMessageBox()
-    msgBox.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
-    msgBox.setWindowTitle(title)
-    msgBox.setText(text)
-    
-    if(typeOfMessage == 1):
-        msgBox.setIcon(QMessageBox.Question)
-    elif(typeOfMessage == 2):
-        msgBox.setIcon(QMessageBox.Information)
-    elif(typeOfMessage == 3):
-        msgBox.setIcon(QMessageBox.Warning)
-    elif(typeOfMessage == 4):
-        msgBox.setIcon(QMessageBox.Critical)
-    
-    msgBox.exec_()
+        message.displayMessageBox(4, "Echec de la connexion", "Vos informations sont incorrectes, vérifiez votre identifiant et votre mot de passe.")
 
 if __name__ == '__main__':
     os.system("cls")

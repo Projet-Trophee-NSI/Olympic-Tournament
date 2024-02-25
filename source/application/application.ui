@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>781</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,60 +29,69 @@ color: rgb(255, 255, 255);</string>
         <item>
          <widget class="QStackedWidget" name="userStackedWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="browserPage">
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_5">
               <item>
-               <widget class="QLabel" name="browseLabel">
-                <property name="font">
-                 <font>
-                  <pointsize>16</pointsize>
-                 </font>
+               <widget class="QLabel" name="mainIconLabel">
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>200</height>
+                 </size>
                 </property>
                 <property name="text">
-                 <string>Parcourir</string>
+                 <string/>
+                </property>
+                <property name="scaledContents">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
-               <spacer name="horizontalSpacer_3">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-              <item>
-               <widget class="QPushButton" name="optionsPushButton">
+               <widget class="QLabel" name="welcomeLabel">
                 <property name="font">
                  <font>
-                  <underline>true</underline>
+                  <pointsize>18</pointsize>
                  </font>
                 </property>
-                <property name="styleSheet">
-                 <string notr="true">color: rgb(255, 255, 255);
-border: 2px solid rgb(8, 26, 62);
-border-radius: 7px;</string>
-                </property>
                 <property name="text">
-                 <string>Options</string>
+                 <string>Bienvenue sur Olympic Tournament</string>
                 </property>
                </widget>
               </item>
              </layout>
             </item>
             <item>
+             <widget class="QLabel" name="browseLabel">
+              <property name="font">
+               <font>
+                <pointsize>16</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Parcourir</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <widget class="QLineEdit" name="searchLineEdit">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
@@ -90,71 +99,109 @@ border: 2px solid white;
 border-radius: 7px;</string>
                 </property>
                 <property name="placeholderText">
-                 <string>Nom d'un tournoi</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="searchPushButton">
-                <property name="minimumSize">
-                 <size>
-                  <width>60</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">color: rgb(0, 0, 0);
-background-color: rgb(255, 255, 255);
-border: 2px solid white;
-border-radius: 7px;</string>
-                </property>
-                <property name="text">
-                 <string>Chercher</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="Line" name="line">
-                <property name="orientation">
-                 <enum>Qt::Vertical</enum>
+                 <string>Filtrer (tournoi, utilisateur, activité, ...)</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QComboBox" name="sortComboBox">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>22</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
 border-radius: 7px;</string>
+                </property>
+                <property name="currentIndex">
+                 <number>-1</number>
                 </property>
                 <property name="placeholderText">
                  <string>-- Trier par --</string>
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QCheckBox" name="seeMyTournamentsCheckBox">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Mes tournois</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
             <item>
-             <widget class="QListWidget" name="browserListWidget">
+             <widget class="QTableWidget" name="tableWidget">
               <property name="font">
                <font>
-                <pointsize>12</pointsize>
+                <pointsize>11</pointsize>
                </font>
               </property>
-              <property name="movement">
-               <enum>QListView::Static</enum>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(0, 0, 0);
+selection-background-color: rgb(255, 255, 255);
+selection-color: rgb(8, 26, 62);</string>
               </property>
-              <item>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <property name="gridStyle">
+               <enum>Qt::NoPen</enum>
+              </property>
+              <attribute name="horizontalHeaderCascadingSectionResizes">
+               <bool>true</bool>
+              </attribute>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>140</number>
+              </attribute>
+              <attribute name="horizontalHeaderHighlightSections">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderHighlightSections">
+               <bool>false</bool>
+              </attribute>
+              <column>
                <property name="text">
-                <string>Tournoi 1</string>
+                <string>Nom</string>
                </property>
-              </item>
-              <item>
+              </column>
+              <column>
                <property name="text">
-                <string>Tournoi 2</string>
+                <string>Sport</string>
                </property>
-              </item>
+              </column>
+              <column>
+               <property name="text">
+                <string>Début</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Fin</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Créateur</string>
+               </property>
+              </column>
              </widget>
             </item>
            </layout>
@@ -189,17 +236,11 @@ border-radius: 7px;</string>
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="backPushButton">
+               <widget class="QPushButton" name="configurePushButton">
                 <property name="minimumSize">
                  <size>
                   <width>80</width>
                   <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="styleSheet">
@@ -209,7 +250,7 @@ border: 2px solid white;
 border-radius: 7px;</string>
                 </property>
                 <property name="text">
-                 <string>&lt;- Retour</string>
+                 <string>Configurer</string>
                 </property>
                </widget>
               </item>
@@ -232,165 +273,1243 @@ border-radius: 7px;</string>
              </layout>
             </item>
             <item>
-             <widget class="QScrollArea" name="tounamentInformationsScrollArea">
-              <property name="widgetResizable">
-               <bool>true</bool>
+             <widget class="QLabel" name="playersLabel">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
               </property>
-              <widget class="QWidget" name="scrollAreaWidgetContents">
-               <property name="geometry">
-                <rect>
-                 <x>0</x>
-                 <y>0</y>
-                 <width>744</width>
-                 <height>431</height>
-                </rect>
-               </property>
-               <layout class="QVBoxLayout" name="verticalLayout_9">
+              <property name="text">
+               <string>Participants</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QGroupBox" name="detailsGroupBox">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>350</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>Informations du tournoi</string>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+                <layout class="QFormLayout" name="formLayout_8">
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="startLabel">
+                   <property name="font">
+                    <font>
+                     <pointsize>9</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Date de début : </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="descriptionLabel">
+                   <property name="text">
+                    <string>Description :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QTextEdit" name="detailsTextEdit">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>250</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>250</height>
+                    </size>
+                   </property>
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0">
+                  <widget class="QLabel" name="endLabel">
+                   <property name="text">
+                    <string>Date de fin :</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLabel" name="startLabel_2">
+                   <property name="text">
+                    <string>ici la date de début</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="1">
+                  <widget class="QLabel" name="endLabel_2">
+                   <property name="text">
+                    <string>ici la date de fin</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QListWidget" name="playersListWidget">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>350</height>
+                 </size>
+                </property>
                 <item>
-                 <widget class="QLabel" name="playersLabel">
-                  <property name="font">
-                   <font>
-                    <pointsize>12</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Participants</string>
-                  </property>
-                 </widget>
+                 <property name="text">
+                  <string>Equipe 1</string>
+                 </property>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_8">
-                  <item>
-                   <widget class="QListWidget" name="playersListWidget">
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <item>
-                     <property name="text">
-                      <string>Equipe 1</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Equipe 2</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="detailsGroupBox">
-                    <property name="title">
-                     <string>Détail de l'équipe</string>
-                    </property>
-                    <property name="flat">
-                     <bool>true</bool>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_8">
-                     <item>
-                      <widget class="QLabel" name="detailLabel">
-                       <property name="font">
-                        <font>
-                         <pointsize>11</pointsize>
-                        </font>
-                       </property>
-                       <property name="text">
-                        <string/>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QTextEdit" name="detailsTextEdit">
-                       <property name="frameShape">
-                        <enum>QFrame::NoFrame</enum>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                 </layout>
+                 <property name="text">
+                  <string>Equipe 2</string>
+                 </property>
                 </item>
-                <item>
-                 <widget class="Line" name="line_2">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_9">
-                  <item>
-                   <widget class="QLabel" name="treeLabel">
-                    <property name="font">
-                     <font>
-                      <pointsize>12</pointsize>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Arbre du tournoi</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer_5">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="hidePushButton">
-                    <property name="minimumSize">
-                     <size>
-                      <width>50</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>50</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="styleSheet">
-                     <string notr="true">color: rgb(0, 0, 0);
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="Line" name="line_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QLabel" name="treeLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>12</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Arbre du tournoi</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_5">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="hidePushButton">
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
 border-radius: 7px;</string>
-                    </property>
-                    <property name="text">
-                     <string>Cacher</string>
-                    </property>
-                    <property name="checkable">
-                     <bool>true</bool>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QLabel" name="treeImageLabel">
+                </property>
+                <property name="text">
+                 <string>Cacher</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="settingsPage">
+           <layout class="QVBoxLayout" name="verticalLayout_12">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QLabel" name="settingsLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>16</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Votre profil</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_6">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="informationsGroupBox">
+              <property name="minimumSize">
+               <size>
+                <width>369</width>
+                <height>124</height>
+               </size>
+              </property>
+              <property name="title">
+               <string>Vos informations</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_13">
+                 <property name="spacing">
+                  <number>15</number>
+                 </property>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_10">
+                   <item>
+                    <widget class="QLabel" name="staticUsernameLabel">
+                     <property name="text">
+                      <string>Nom d'utilisateur</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="staticMailLabel">
+                     <property name="text">
+                      <string>Courier électronique</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="staticDateLabel">
+                     <property name="text">
+                      <string>Date de création du compte</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="staticAgeLabel">
+                     <property name="text">
+                      <string>Âge</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout_11">
+                   <item>
+                    <widget class="QLabel" name="usernameLabel">
+                     <property name="font">
+                      <font>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>Antoine</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="mailLabel">
+                     <property name="font">
+                      <font>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>antoine@mail.com</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="dateLabel">
+                     <property name="font">
+                      <font>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>le 22/02/2024</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="ageLabel">
+                     <property name="font">
+                      <font>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>18 ans</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_7">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QPushButton" name="downloadDataPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>131</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>131</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <underline>true</underline>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(255, 255, 255);
+border: 2px solid rgb(8, 26, 62);
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Télécharger vos données</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="doModificationscheckBox">
+              <property name="text">
+               <string>Modifier une information</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="modifyGroupBox">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="title">
+               <string>Modifier</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <item>
+                <layout class="QFormLayout" name="formLayout">
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="changeUsernameLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>160</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Nouveau nom d'utilisateur</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="updateUsernamePushButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mettre à jour</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="Line" name="line_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QFormLayout" name="formLayout_3">
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="newMailLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>160</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Nouvell adresse mail</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="updateMailPushButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mettre à jour</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="Line" name="line_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QFormLayout" name="formLayout_5">
+                 <item row="0" column="0">
+                  <widget class="QSpinBox" name="updateAgeSpinBox">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>160</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="suffix">
+                    <string> ans</string>
+                   </property>
+                   <property name="prefix">
+                    <string>J'ai maintenant </string>
+                   </property>
+                   <property name="minimum">
+                    <number>15</number>
+                   </property>
+                   <property name="value">
+                    <number>15</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QPushButton" name="updateAgePushButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mettre à jour</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="Line" name="line_5">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QFormLayout" name="formLayout_2">
+                 <item row="0" column="0">
+                  <widget class="QLineEdit" name="currentPasswordLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>160</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="echoMode">
+                    <enum>QLineEdit::PasswordEchoOnEdit</enum>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Mot de passe actuel</string>
+                   </property>
+                   <property name="clearButtonEnabled">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLineEdit" name="newPasswordLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="echoMode">
+                    <enum>QLineEdit::Password</enum>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Nouveau mot de passe</string>
+                   </property>
+                   <property name="clearButtonEnabled">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLineEdit" name="confirmPasswordLineEdit">
+                   <property name="minimumSize">
+                    <size>
+                     <width>160</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="echoMode">
+                    <enum>QLineEdit::Password</enum>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Confirmation</string>
+                   </property>
+                   <property name="clearButtonEnabled">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QPushButton" name="updatePasswordPushButton">
+                   <property name="minimumSize">
+                    <size>
+                     <width>100</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>100</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mettre à jour</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QPushButton" name="seeNewPasswordPushButton">
+                   <property name="maximumSize">
+                    <size>
+                     <width>50</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                   </property>
+                   <property name="text">
+                    <string>Voir</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="createPage">
+           <layout class="QVBoxLayout" name="verticalLayout_15">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="createTournamentLabel">
+                <property name="font">
+                 <font>
+                  <pointsize>16</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Créer un nouveau tournoi</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="tournamentInformationsGroupBox">
+              <property name="title">
+               <string>Informations</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QFormLayout" name="formLayout_4">
+               <item row="0" column="0">
+                <widget class="QLabel" name="tournamentNameLabel_2">
+                 <property name="text">
+                  <string>Nom :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="tournamentNameLineEdit">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez le nom de votre tournoi</string>
+                 </property>
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="tournamentActivityLabel">
+                 <property name="text">
+                  <string>Activité :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="tournamentActivityLineEdit">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez le sport ou l'activité de votre tournoi</string>
+                 </property>
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="tournamentResumeLabel">
+                 <property name="text">
+                  <string>Description :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QTextEdit" name="tournamentResumeTextEdit">
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez une courte description pour présenter votre tournoi</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="startDateLabel">
+                 <property name="text">
+                  <string>Date de début :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QDateEdit" name="startDateEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>90</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="endDateLabel">
+                 <property name="text">
+                  <string>Date de fin :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QDateEdit" name="endDateEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>90</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QListWidget" name="arbiterListWidget"/>
+               </item>
+               <item row="5" column="0">
+                <widget class="QComboBox" name="arbiterNameComboBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>160</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="editable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez le nom d'un arbitre</string>
+                 </property>
+                 <item>
                   <property name="text">
-                   <string>Ceci est l'image d'un arbre</string>
+                   <string>Antoine</string>
                   </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Mattéo</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Titouan</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Lucas</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Axel</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QPushButton" name="addArbiterPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>100</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Ajouter</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QPushButton" name="delLastArbiterPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>190</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Supprimer le dernier élément</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="participantsGroupBox">
+              <property name="title">
+               <string>Participants</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QFormLayout" name="formLayout_6">
+               <item row="0" column="0">
+                <widget class="QLineEdit" name="addParticipantsLineEdit">
+                 <property name="minimumSize">
+                  <size>
+                   <width>220</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez le nom d'un des participants</string>
+                 </property>
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QPushButton" name="addParticipantsPushButton">
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Ajouter</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="participantsListLabel">
+                 <property name="text">
+                  <string>Liste des participants :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QListWidget" name="participantsListListWidget">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QPushButton" name="previewPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>170</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Prévisualiser l'arbre de départ</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QPushButton" name="delLastElementPushButton">
+                 <property name="maximumSize">
+                  <size>
+                   <width>190</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Supprimer le dernier élément</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="winnerGroupBox">
+              <property name="title">
+               <string>Prochains vainqueurs</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QFormLayout" name="formLayout_7">
+               <item row="0" column="0">
+                <widget class="QLabel" name="participantsListLabel_2">
+                 <property name="text">
+                  <string>Liste des participants :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QListWidget" name="participantsListListWidget_2"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLineEdit" name="winnersNameLineEdit">
+                 <property name="minimumSize">
+                  <size>
+                   <width>220</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Saisissez le nom d'un des vainqueurs</string>
+                 </property>
+                 <property name="clearButtonEnabled">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QPushButton" name="winnersAddPushButton">
+                 <property name="maximumSize">
+                  <size>
+                   <width>100</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Ajouter</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="winnersListLabel">
+                 <property name="text">
+                  <string>Liste des vainqueurs :</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QListWidget" name="winnersListListWidget"/>
+               </item>
+               <item row="3" column="0">
+                <widget class="QPushButton" name="seeTreePushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>110</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Voir l'arbre actuel</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QPushButton" name="previewPushButton_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>170</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Prévisualiser l'arbre suivant</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="validateTournamentPushButton">
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgb(0, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+              </property>
+              <property name="text">
+               <string>Confirmer et enregistrer</string>
+              </property>
              </widget>
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="settingsPage"/>
          </widget>
         </item>
        </layout>
@@ -669,23 +1788,117 @@ border-radius: 7px;</string>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color: rgb(0, 0, 0);
+border: 2px solid;
+border-radius: 7px;
+border-color: rgb(8, 26, 62);</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionBrowse"/>
+   <addaction name="actionCreate"/>
+   <addaction name="actionMyTournaments"/>
+   <addaction name="separator"/>
+   <addaction name="actionProfile"/>
+  </widget>
+  <action name="actionProfile">
+   <property name="text">
+    <string>Profil</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Accèder à mon profil&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionBrowse">
+   <property name="text">
+    <string>Browse</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Parcourir les tournois en cours&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionCreate">
+   <property name="text">
+    <string>Create</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Créer un nouveau tournoi&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionMyTournaments">
+   <property name="text">
+    <string>MyTournaments</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Gérer mes tournois&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections>
   <connection>
    <sender>playersListWidget</sender>
    <signal>currentTextChanged(QString)</signal>
-   <receiver>detailLabel</receiver>
+   <receiver>startLabel</receiver>
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>176</x>
-     <y>214</y>
+     <x>578</x>
+     <y>275</y>
     </hint>
     <hint type="destinationlabel">
-     <x>421</x>
-     <y>194</y>
+     <x>218</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addParticipantsLineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>addParticipantsPushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>194</x>
+     <y>359</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>393</x>
+     <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>winnersNameLineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>winnersAddPushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>605</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>596</y>
     </hint>
    </hints>
   </connection>

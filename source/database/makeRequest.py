@@ -1,30 +1,36 @@
 import sqlite3 
 import os
-from datetime import*
+from datetime import *
+import math as mat
 
 localPathbd = os.path.dirname(os.path.abspath(__file__))
 
 #### Pour faire des test
-# con = sqlite3.connect("storage.db")
+# con = sqlite3.connect(localPathbd + "/storage.db")
 # cur = con.cursor()
-# cur.execute("DROP TABLE tournoie")
+# cur.execute("ALTER TABLE User RENAME COLUMN mail TO email")
 # con.commit()
 # con.close()
 
-def inscri_donne (u : str,m : str, e : str, d = datetime.today().strftime('%d-%m-%Y')):
+
+################# FONCTIONS POUR LA TABLE User
+def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, date: str = datetime.today().strftime('%d-%m-%Y')) -> bool:
     '''
-    u est l'identifient, m est le mdp, e est le mail, d est la date de création du compte
-    u -> str
-    m -> str
-    d -> str
+    Inscrie une nouvelle personne dans la table User
+    nom : nom de l'utilisateur -> str
+    mdp : mot de passe -> str
+    email : adresse email -> str
+    age : age de la personne -> int
+    date : date de création du compte -> str
+    admin : 0/1 pour savoir si la personne est admin -> int
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    a = cur.execute("SELECT user FROM user WHERE user= ? ", (u,))
+    a = cur.execute("SELECT * FROM User WHERE nom= ? ", (nom,))
     a = a.fetchone()
     if a == None :
-        val = (None, u, m, e, d)
-        cur.execute("INSERT INTO user VALUES(?,?,?,?,?)", val)
+        val = (trouver_minimal_id_user(),nom, email, mdp, age, date, admin)
+        cur.execute("INSERT INTO user VALUES(?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
         return True
@@ -33,77 +39,112 @@ def inscri_donne (u : str,m : str, e : str, d = datetime.today().strftime('%d-%m
         con.close()
         return False
 
-
-def connect (m : str, u : str):
+def connect(email : str, mdp : str) -> tuple[bool,int,int]:
     '''
-    m est le mdp de l'utilisateur et u sont identifient
     La fonction retourne : acces ou pas/ l'id de l'utilisateur / 1 si admin et 0 si utilisateur
-    m -> str
-    u -> str
+    mdp : mot de passe -> str
+    nom : nom de l'utilisateur-> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (u,)
-    a = cur.execute("SELECT mdp FROM user WHERE user= ? ", val)
+    val = (email,)
+    a = cur.execute("SELECT mdp FROM User WHERE email= ? ", val)
     a = a.fetchone()
     if a == None:
         return False,
     else :
-        if a[0] == m :
-            b = cur.execute("SELECT id, admin FROM user WHERE user= ? AND mdp= ?", (u, m))
+        if a[0] == mdp :
+            b = cur.execute("SELECT id, admin FROM User WHERE email= ? AND mdp= ?", (email,mdp))
             b = b.fetchone()
             con.commit()
             con.close() 
             return True, b[0], b[1]
-
         else :
             con.commit()
             con.close()
             return False,
     
-
-def modife_donne (i : int,v : str,ch : str):
+def modife_donne_user(id : int, valeur: str, colone : str):
     '''
-    modifie les donner choisie:
-    i : id utilisateur -> int
-    v : nouvelle valeur -> str
-    ch : valeur à modifier -> str
+    Modifie les donners choisies:
+    id : identifiant de l'utilisateur -> int
+    valeur : nouvelle valeur -> str
+    colone : colone à modifier -> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (v,i)
-    if ch=="mdp":
-        cur.execute("UPDATE user SET mdp=? WHERE id= ?", val)
-    elif ch=="mail":
-        cur.execute("UPDATE user SET user=? WHERE id= ?", val)
-    elif ch=="pts":
-        cur.execute("UPDATE user SET res_pari=? WHERE id= ?", val)
+    val = (valeur,id)
+    if colone=="mdp":
+        cur.execute("UPDATE User SET mdp=? WHERE id= ?", val)
+        return True
+    elif colone=="email":
+        cur.execute("UPDATE User SET email=? WHERE id= ?", val)
+        return True
+    elif colone=="age":
+        cur.execute("UPDATE User SET age=? WHERE id= ?", val)
+        return True
+    elif colone=="nom":
+        lstNom=cur.execute("SELECT nom FROM User")
+        lstNom = lstNom.fetchall()
+        if not(valeur in lstNom):
+            cur.execute("UPDATE User SET nom=? id=?",val)
+            return True
+        return False
     con.commit()
     con.close()
 
-def suprime_donne(i:int):
+def suprime_donne_user(id:int):
     """
     Supprime un utilisateur de la table user
-    i -> int
+    id : identifiant de l'utilisateur -> int
     """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (i,)
-    cur.execute("DELETE FROM user WHERE id=?", val)
+    val = (id,)
+    cur.execute("DELETE FROM User WHERE id=?", val)
     con.commit()
     con.close()
 
-def cree_tournoie(u,n,p,np,nt):
-    '''
+def trouver_minimal_id_user():
+    """
+    Renvoie l'id minimal disponible pour la table User
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    lstId=cur.execute("SELECT id FROM User")
+    lstId=lstId.fetchall()
+    lstId=[row[0] for row in lstId]
+    con.commit()
+    con.close()
+    if lstId==None:
+        return 1
+    for i in range(len(lstId)-1):
+        if lstId[i]+1!=lstId[i+1]:
+            return i+1
+    return len(lstId)+1
 
+
+################# FONCTIONS POUR LA TABLE TournoiArbre
+
+## "[a/b/c/d][][][]"
+## [[a,b,c,d,m],[],[],[]]
+    
+def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str],sport,despcritpion) -> bool:
+    '''
+    cree un nouveau tournoi et revoie si la création a réussie
+    nom : nom du tournoi -> str
+    listeIdArbitre : liste des identifiant des arbitres -> list[int]
+    listeParticipant : list des participan du tounroie -> list[str]
+    sport : sport du tournoie -> str
+    description : description du tournoie -> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    a = cur.execute("SELECT user FROM user WHERE user= ? ", (u,))
+    a = cur.execute("SELECT nom FROM TournoiArbre WHERE nom= ? ", (nom,))
     a = a.fetchone()
     if a == None :
-        val = (None,n,p,np,nt)
-        cur.execute("INSERT INTO user VALUES(?,?,?,?,?)", val)
+        val = (trouver_minimal_id_tournoiArbre(),nom,convertLsttoSTR(listeIdArbitre),convertLsttoSTR(listeParticipant),nombreTour(listeParticipant),len(listeParticipant),sport,despcritpion,arbreLISTtoSTR(cree_arbre(listeParticipant,nombreTour(listeParticipant))))
+        cur.execute("INSERT INTO TournoiArbre VALUES(?,?,?,?,?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
         return True
@@ -112,28 +153,146 @@ def cree_tournoie(u,n,p,np,nt):
         con.close()
         return False
 
-def convertSTRtoLst(ch):
-    listeFinal=[]
+def convertSTRtoLst(ch:str)->list[list[str]]:
+    """
+    convertie une chaine de charactère en liste de liste
+    ch -> str
+    """
     tempo=''
     for e in ch:
         if e=='[':
             newListe=[]
         elif e==']':
             newListe.append(tempo)
-            listeFinal.append(newListe)
             tempo=''
         elif e=='/':
             newListe.append(tempo)
             tempo=''
         else:
             tempo+=e
-    return listeFinal
+    return newListe
 
-## "[a/b/c/d]"
-## [[a,b,c,d,m],[],[],[]]
+def convertLsttoSTR(liste:list)->str:
+    """
+    convertie une liste en chaine de charactère
+    liste -> list
+    """
+    chFinale="["
+    for j in range(len(liste)):
+        chFinale+=str(liste[j])
+        if j != len(liste)-1:
+            chFinale+="/"
+    chFinale+="]"
+    return chFinale
 
-def convertLsttoSTR(liste):
-    pass
+def arbreSTRtoLIST(arbreStr):
+    arbreList=[]
+    tempo=""
+    i=0
+    while i<len(arbreStr):
+        tempo+=arbreStr[i]
+        if arbreStr[i]=="]":
+            arbreList.append(convertSTRtoLst(tempo))
+            tempo=""
+        i+=1
+    return arbreList
+
+def arbreLISTtoSTR(arbreLst):
+    arbreStr=""
+    for e in arbreLst:
+        arbreStr+=convertLsttoSTR(e)
+    return arbreStr
+
+def modife_donne_tournoiArbre(id: int,valeur : str,colone : str):
+    '''
+    modifie les donner choisie:
+    id : identifiant du tournoie -> int
+    valeur : nouvelle valeur -> str
+    colone : colone à modifier -> str
+    '''
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    if colone=="arbitre":
+        lstArbitre=convertSTRtoLst(cur.execute("SELECT arbitres FROM TournoieArbre"))
+        if not(valeur in lstArbitre):
+            valeur=convertLsttoSTR(lstArbitre.append(valeur))
+            val=(valeur,id)
+            cur.execute("UPDATE TournoiArbre SET arbitres=? WHERE id= ?", val)
+        con.commit()
+        con.close()
+        return True
+    elif colone=="arbre":
+        valeur=arbreLISTtoSTR(valeur)
+        val=(valeur,id)
+        cur.execute("UPDATE TournoiArbre SET arbre=? WHERE id= ?", val)
+        con.commit()
+        con.close()
+        return True
+    elif colone=="nom":
+        val=(valeur,id)
+        cur.execute("UPDATE TournoiArbre SET nom=? WHERE id= ?", val)
+        con.commit()
+        con.close()
+        return True
+    elif colone=="description":
+        val=(valeur,id)
+        cur.execute("UPDATE TournoiArbre SET description=? WHERE id=?",val)
+        con.commit()
+        con.close()
+        return True
+    con.commit()
+    con.close()
+    return False
+
+def suprime_donne_tournoiArbre(id:int):
+    """
+    Supprime un utilisateur de la table user
+    id : identifiant -> int
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    val = (id,)
+    cur.execute("DELETE FROM TournoiArbre WHERE id=?", val)
+    con.commit()
+    con.close()
+
+def nombreTour(listeParticipant:list[int])->int:
+    """
+    renvoie le nombre de tour nessesaire pour le tournoi
+    liste_participan -> list
+    """
+    taille=len(listeParticipant)
+    if mat.log2(taille)==int(mat.log2(taille)):
+        return int(mat.log2(taille))+1
+    return int(mat.log2(taille))+2
+
+def cree_arbre(liste_participant:list[int],nb_tour:int)->list[list]:
+    """
+    cree l'arbre de tournoi
+    liste_participant -> list
+    nb_tour -> int
+    """
+    listeFinals=[[] for i in range(nb_tour)]
+    listeFinals[0]=liste_participant
+    return listeFinals
+
+def trouver_minimal_id_tournoiArbre()->int:
+    """
+    Renvoie l'id minimal disponible pour la table TournoiArbre
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    lstId=cur.execute("SELECT id FROM TournoiArbre")
+    lstId=lstId.fetchall()
+    lstId=[row[0] for row in lstId]
+    con.commit()
+    con.close()
+    if lstId==None:
+        return 1
+    for i in range(len(lstId)-1):
+        if lstId[i]+1!=lstId[i+1]:
+            return i+1
+    return len(lstId)+1
 
 #### Fonctions d'aide à la comprehension
 def affichTableUser():
@@ -146,14 +305,15 @@ def affichTableUser():
     for e in res:
         print(e)
 
-def affichTableTournoi():
+def affichTableTournoiArbre():
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    cur.execute("SELECT * FROM tournoie")
+    cur.execute("SELECT * FROM TournoiArbre")
     res = cur.fetchall()
     con.commit()
     con.close()
     for e in res:
         print(e)
 
+########### TEST DES FONCTIONS
 affichTableUser()

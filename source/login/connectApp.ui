@@ -431,13 +431,13 @@ border-radius: 7px;</string>
               <string>J'ai </string>
              </property>
              <property name="minimum">
-              <number>0</number>
+              <number>15</number>
              </property>
              <property name="maximum">
               <number>122</number>
              </property>
              <property name="value">
-              <number>18</number>
+              <number>15</number>
              </property>
             </widget>
            </item>
@@ -452,7 +452,7 @@ border-radius: 7px;</string>
               <string notr="true">color: rgb(255, 255, 255);</string>
              </property>
              <property name="text">
-              <string>Je certifie avoir plus de 18 ans</string>
+              <string>Je certifie avoir plus de 15 ans</string>
              </property>
             </widget>
            </item>

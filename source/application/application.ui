@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>781</height>
+    <height>886</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@ color: rgb(255, 255, 255);</string>
         <item>
          <widget class="QStackedWidget" name="userStackedWidget">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="browserPage">
            <layout class="QVBoxLayout" name="verticalLayout_5">

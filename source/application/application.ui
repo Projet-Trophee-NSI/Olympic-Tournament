@@ -587,7 +587,7 @@ border-radius: 7px;</string>
                       </font>
                      </property>
                      <property name="text">
-                      <string>le 22/02/2024</string>
+                      <string>22/02/2024</string>
                      </property>
                     </widget>
                    </item>
@@ -1861,12 +1861,12 @@ border-color: rgb(8, 26, 62);</string>
    <slot>setText(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>578</x>
-     <y>275</y>
+     <x>212</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>218</x>
-     <y>449</y>
+     <x>142</x>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -1877,12 +1877,12 @@ border-color: rgb(8, 26, 62);</string>
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>194</x>
-     <y>359</y>
+     <x>327</x>
+     <y>73</y>
     </hint>
     <hint type="destinationlabel">
-     <x>393</x>
-     <y>360</y>
+     <x>203</x>
+     <y>73</y>
     </hint>
    </hints>
   </connection>
@@ -1893,12 +1893,12 @@ border-color: rgb(8, 26, 62);</string>
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>319</x>
-     <y>605</y>
+     <x>361</x>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>389</x>
-     <y>596</y>
+     <x>203</x>
+     <y>74</y>
     </hint>
    </hints>
   </connection>

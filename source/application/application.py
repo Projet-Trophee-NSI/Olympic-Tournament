@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QListWidget, QLineEdit
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QListWidget, QLineEdit, QFileDialog
 from PyQt5.QtGui import QPixmap, QIcon, QColor, QBrush
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate, QSize
 from PyQt5.uic import loadUi
 from datetime import datetime
 import os
@@ -14,10 +14,15 @@ sys.path.insert(0, localPath + "/../tools")
 import treeGenerator
 import displayMessageBox as message
 import imageViewer
+import createPDF
 
 class MonApplication(QMainWindow):
-    def __init__(self):
-        super(MonApplication, self).__init__() #<- comprend pas le super
+    def __init__(self, idOfUser: int, typeOfUser: int, loginId: int, hashPassword: int):
+        super(MonApplication, self).__init__()
+        self.idOfUser = idOfUser
+        self.typeOfUser = typeOfUser
+        self.loginId = loginId
+        self.hashPassword = hashPassword       
         
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
@@ -53,6 +58,7 @@ class MonApplication(QMainWindow):
         self.addArbiterPushButton.clicked.connect(lambda: addArbiter())
         self.delLastArbiterPushButton.clicked.connect(lambda: self.arbiterListWidget.takeItem(self.arbiterListWidget.count() - 1))
         self.seeNewPasswordPushButton.clicked.connect(lambda: seeNewPassword())
+        self.downloadDataPushButton.clicked.connect(lambda: downloadData())
         
         sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
         self.sortComboBox.addItems(sortingItems)
@@ -62,6 +68,8 @@ class MonApplication(QMainWindow):
         self.startDateEdit.setMinimumDate(QDate.currentDate())
         self.endDateEdit.setMinimumDate(QDate.currentDate())
         
+        self.onLogin()
+        
         ## TEMPORAIRE
         self.iw = imageViewer.ImageViewer()
         self.iw.setPhoto(QPixmap(localPath + "/../tools/treePreview.png"))
@@ -70,6 +78,12 @@ class MonApplication(QMainWindow):
         ## TEMPORAIRE
         
         self.modifyGroupBox.hide()
+        
+    def onLogin(self) -> None:
+        """
+        Procédure qui remplit l'ensemble des labels satiques de l'application et qui dépendent seulement de l'utilisateur
+        """
+        self.mailLabel.setText(self.loginId)
         
 def tournamentClicked(item):
     if(item.column() == 0):
@@ -220,6 +234,20 @@ def seeNewPassword() -> None:
     new_mode = QLineEdit.Normal if current_mode == QLineEdit.Password else QLineEdit.Password #affecte un mode affichage avec : QLineEdit.Normal : Affiche le texte normalement|QLineEdit.Password : Affiche des caractères de remplacement pour masquer le texte
     application.newPasswordLineEdit.setEchoMode(new_mode) #modifie le mode de l'affichage de passwordLineEdit
 
+def downloadData() -> None:
+    userName = "Nom d'utilisateur : " + application.usernameLabel.text()
+    mail = "Courrier électronique : " + application.loginId
+    date = "Date de création du compte : " + application.dateLabel.text()
+    age = "Âge : " + application.ageLabel.text()
+    
+    fileName, _ = QFileDialog.getSaveFileName(None,"Enregistrer mes données", "Mes donnes", "PDF Files (*.pdf)")
+    
+    if(fileName):
+        createPDF.genDataPDF([userName, mail, date, age], fileName)
+        os.startfile(fileName) 
+    else:
+        message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisie est invalide ou inexistant.")
+
 if __name__ == '__main__':
     app = QApplication([])
     
@@ -230,11 +258,18 @@ if __name__ == '__main__':
     app.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.ico"))
     ## Forcer l'icône de la barre des tâche (fin) ##
     
-    application = MonApplication()
+    with open(localPath + "/temp.tmp", 'r') as tempFile:
+        content = tempFile.read()
+    os.remove(localPath + "/temp.tmp")
+    
+    content = content.split(";")
+    
+    application = MonApplication(content[0], content[1], content[2], content[3])
     application.show()
     
-    fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]])
+    fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]]) # TEMPORAIRE
     
     application.sortComboBox.setCurrentIndex(0)
+    application.resize(QSize(800, 800))
     
     app.exec_()

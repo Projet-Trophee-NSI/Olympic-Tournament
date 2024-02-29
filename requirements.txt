@@ -1,0 +1,3 @@
+pip install pyQt5
+pip install graphviz
+pip install fpdf

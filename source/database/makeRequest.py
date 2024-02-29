@@ -113,14 +113,16 @@ def trouver_minimal_id_user():
     cur = con.cursor()
     lstId=cur.execute("SELECT id FROM User")
     lstId=lstId.fetchall()
-    lstId=[row[0] for row in lstId]
+    print(lstId)
+    lstId=sorted([row[0] for row in lstId])
     con.commit()
+    print(lstId)
     con.close()
     if lstId==None:
         return 1
     for i in range(len(lstId)-1):
         if lstId[i]+1!=lstId[i+1]:
-            return i+1
+            return i+2
     return len(lstId)+1
 
 
@@ -129,7 +131,7 @@ def trouver_minimal_id_user():
 ## "[a/b/c/d][][][]"
 ## [[a,b,c,d,m],[],[],[]]
     
-def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str],sport,despcritpion) -> bool:
+def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str],sport,despcritpion,debut,fin) -> bool:
     '''
     cree un nouveau tournoi et revoie si la création a réussie
     nom : nom du tournoi -> str
@@ -137,13 +139,15 @@ def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str
     listeParticipant : list des participan du tounroie -> list[str]
     sport : sport du tournoie -> str
     description : description du tournoie -> str
+    debut : date de début du tournoie -> str
+    fin : date de fin du trounoie -> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     a = cur.execute("SELECT nom FROM TournoiArbre WHERE nom= ? ", (nom,))
     a = a.fetchone()
     if a == None :
-        val = (trouver_minimal_id_tournoiArbre(),nom,convertLsttoSTR(listeIdArbitre),convertLsttoSTR(listeParticipant),nombreTour(listeParticipant),len(listeParticipant),sport,despcritpion,arbreLISTtoSTR(cree_arbre(listeParticipant,nombreTour(listeParticipant))))
+        val = (trouver_minimal_id_tournoiArbre(),nom,convertLsttoSTR(listeIdArbitre),convertLsttoSTR(listeParticipant),nombreTour(listeParticipant),len(listeParticipant),sport,despcritpion,debut,fin,arbreLISTtoSTR(cree_arbre(listeParticipant,nombreTour(listeParticipant))))
         cur.execute("INSERT INTO TournoiArbre VALUES(?,?,?,?,?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
@@ -284,14 +288,16 @@ def trouver_minimal_id_tournoiArbre()->int:
     cur = con.cursor()
     lstId=cur.execute("SELECT id FROM TournoiArbre")
     lstId=lstId.fetchall()
-    lstId=[row[0] for row in lstId]
+    print(lstId)
+    lstId=sorted([row[0] for row in lstId])
+    print(lstId)
     con.commit()
     con.close()
     if lstId==None:
         return 1
     for i in range(len(lstId)-1):
         if lstId[i]+1!=lstId[i+1]:
-            return i+1
+            return i+2
     return len(lstId)+1
 
 #### Fonctions d'aide à la comprehension
@@ -314,6 +320,3 @@ def affichTableTournoiArbre():
     con.close()
     for e in res:
         print(e)
-
-########### TEST DES FONCTIONS
-affichTableUser()

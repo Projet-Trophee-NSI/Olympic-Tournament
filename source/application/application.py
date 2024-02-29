@@ -10,11 +10,13 @@ import ctypes
 localPath = os.path.dirname(os.path.abspath(__file__))
 
 sys.path.insert(0, localPath + "/../tools")
+sys.path.insert(0, localPath + "/../database")
 
 import treeGenerator
 import displayMessageBox as message
 import imageViewer
 import createPDF
+import makeRequest
 
 class MonApplication(QMainWindow):
     def __init__(self, idOfUser: int, typeOfUser: int, loginId: int, hashPassword: int):
@@ -163,10 +165,12 @@ def searchTournament(searchedText: str) -> None: filterTablesElements(searchedTe
 def createTournament(mode: int) -> None:
     if(mode == 1):
         application.winnerGroupBox.hide()
+        application.delTournamentGroupBox.hide()
         application.participantsGroupBox.show()
         application.createTournamentLabel.setText("Créer un nouveau tournoi")
     elif(mode == 2):
         application.winnerGroupBox.show()
+        application.delTournamentGroupBox.show()
         application.participantsGroupBox.hide()
         application.createTournamentLabel.setText("Modifier un tournoi")
     application.userStackedWidget.setCurrentIndex(3)
@@ -197,10 +201,18 @@ def defineTournament() -> None:
     description = application.tournamentResumeTextEdit.toPlainText()
     startDate = application.startDateEdit.date().toString('dd/MM/yyyy')
     endDate = application.endDateEdit.date().toString('dd/MM/yyyy')
-    partcipants = [application.participantsListListWidget.item(i).text() for i in range(application.participantsListListWidget.count())]
+    participants = [application.participantsListListWidget.item(i).text() for i in range(application.participantsListListWidget.count())]
     arbiters = [application.arbiterListWidget.item(i).text() for i in range(application.arbiterListWidget.count())]
     
-    ## FAIRE LE LIEN AVEC LA BDD
+    if (len(participants) < 2):
+        message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la création est impossible.")
+
+    elif ((len(participants)%2) != 0):
+        message.displayMessageBox(4, "Manque de participants", f"Vous avez entréun nombre impaire de participants ({len(participants)}) à votre tournoi, la création est impossible.")
+
+    else:
+        makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate)
+        message.displayMessageBox(1, "Réussite", "Création du tournoi réussi")
 
 def fillTournamentTable() -> None:
     """

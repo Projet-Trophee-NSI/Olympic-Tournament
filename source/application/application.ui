@@ -154,7 +154,9 @@ border-radius: 7px;</string>
               <property name="styleSheet">
                <string notr="true">color: rgb(0, 0, 0);
 selection-background-color: rgb(255, 255, 255);
-selection-color: rgb(8, 26, 62);</string>
+selection-color: rgb(8, 26, 62);
+background-color: rgb(11, 36, 86);
+selection-color: rgb(11, 36, 86);</string>
               </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
@@ -301,18 +303,6 @@ border-radius: 7px;</string>
                  <bool>true</bool>
                 </property>
                 <layout class="QFormLayout" name="formLayout_8">
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="startLabel">
-                   <property name="font">
-                    <font>
-                     <pointsize>9</pointsize>
-                    </font>
-                   </property>
-                   <property name="text">
-                    <string>Date de début : </string>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="descriptionLabel">
                    <property name="text">
@@ -363,6 +353,13 @@ border-radius: 7px;</string>
                   <widget class="QLabel" name="endLabel_2">
                    <property name="text">
                     <string>ici la date de fin</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="startLabel">
+                   <property name="text">
+                    <string>Date de début : </string>
                    </property>
                   </widget>
                  </item>
@@ -1065,6 +1062,12 @@ border-radius: 7px;</string>
                </item>
                <item row="0" column="1">
                 <widget class="QLineEdit" name="tournamentNameLineEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>448</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
@@ -1088,6 +1091,12 @@ border-radius: 7px;</string>
                </item>
                <item row="1" column="1">
                 <widget class="QLineEdit" name="tournamentActivityLineEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>448</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
@@ -1111,6 +1120,12 @@ border-radius: 7px;</string>
                </item>
                <item row="2" column="1">
                 <widget class="QTextEdit" name="tournamentResumeTextEdit">
+                 <property name="maximumSize">
+                  <size>
+                   <width>448</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
@@ -1168,9 +1183,6 @@ border-radius: 7px;</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="1">
-                <widget class="QListWidget" name="arbiterListWidget"/>
-               </item>
                <item row="5" column="0">
                 <widget class="QComboBox" name="arbiterNameComboBox">
                  <property name="minimumSize">
@@ -1216,6 +1228,16 @@ border-radius: 7px;</string>
                    <string>Axel</string>
                   </property>
                  </item>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QListWidget" name="arbiterListWidget">
+                 <property name="maximumSize">
+                  <size>
+                   <width>448</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
                 </widget>
                </item>
                <item row="6" column="0">
@@ -1332,7 +1354,7 @@ border-radius: 7px;</string>
                 <widget class="QListWidget" name="participantsListListWidget">
                  <property name="maximumSize">
                   <size>
-                   <width>16777215</width>
+                   <width>397</width>
                    <height>16777215</height>
                   </size>
                  </property>
@@ -1396,7 +1418,14 @@ border-radius: 7px;</string>
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QListWidget" name="participantsListListWidget_2"/>
+                <widget class="QListWidget" name="participantsListListWidget_2">
+                 <property name="maximumSize">
+                  <size>
+                   <width>397</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QLineEdit" name="winnersNameLineEdit">
@@ -1447,7 +1476,14 @@ border-radius: 7px;</string>
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QListWidget" name="winnersListListWidget"/>
+                <widget class="QListWidget" name="winnersListListWidget">
+                 <property name="maximumSize">
+                  <size>
+                   <width>397</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="0">
                 <widget class="QPushButton" name="seeTreePushButton">
@@ -1491,7 +1527,63 @@ border-radius: 7px;</string>
              </widget>
             </item>
             <item>
+             <widget class="QGroupBox" name="delTournamentGroupBox">
+              <property name="title">
+               <string>Supprimer</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QPushButton" name="delTournamentPushButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>75</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(193, 0, 0);
+background-color: rgb(255, 255, 255);
+border: 2px solid white;
+border-radius: 7px;</string>
+                 </property>
+                 <property name="text">
+                  <string>Supprimer</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_8">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="validateTournamentPushButton">
+              <property name="maximumSize">
+               <size>
+                <width>643</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="font">
                <font>
                 <pointsize>12</pointsize>
@@ -1855,33 +1947,17 @@ border-color: rgb(8, 26, 62);</string>
  <resources/>
  <connections>
   <connection>
-   <sender>playersListWidget</sender>
-   <signal>currentTextChanged(QString)</signal>
-   <receiver>startLabel</receiver>
-   <slot>setText(QString)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>212</x>
-     <y>58</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>142</x>
-     <y>69</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>addParticipantsLineEdit</sender>
    <signal>returnPressed()</signal>
    <receiver>addParticipantsPushButton</receiver>
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>327</x>
+     <x>359</x>
      <y>73</y>
     </hint>
     <hint type="destinationlabel">
-     <x>203</x>
+     <x>201</x>
      <y>73</y>
     </hint>
    </hints>
@@ -1893,11 +1969,11 @@ border-color: rgb(8, 26, 62);</string>
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>361</x>
+     <x>359</x>
      <y>74</y>
     </hint>
     <hint type="destinationlabel">
-     <x>203</x>
+     <x>201</x>
      <y>74</y>
     </hint>
    </hints>

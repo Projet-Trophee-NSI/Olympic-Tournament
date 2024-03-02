@@ -21,8 +21,8 @@ import makeRequest
 class MonApplication(QMainWindow):
     def __init__(self, idOfUser: int, typeOfUser: int, loginId: int, hashPassword: int):
         super(MonApplication, self).__init__()
-        self.idOfUser = idOfUser
-        self.typeOfUser = typeOfUser
+        self.idOfUser = int(idOfUser)
+        self.typeOfUser = int(typeOfUser)
         self.loginId = loginId
         self.hashPassword = hashPassword       
         
@@ -36,16 +36,23 @@ class MonApplication(QMainWindow):
         # Charger l'interface utilisateur dans le widget central
         loadUi(localPath + "/application.ui", self)
         
+        if(self.typeOfUser == 1):
+            self.actionAdminPanel.setVisible(False)
+            for _ in range(2): self.toolBar.removeAction(self.toolBar.actions()[-1])
+        
         self.actionBrowse.setIcon(QIcon(localPath + "/../ressources/browseIcon.png"))
         self.actionCreate.setIcon(QIcon(localPath + "/../ressources/createIcon.png"))
         self.actionMyTournaments.setIcon(QIcon(localPath + "/../ressources/configureIcon.png"))
         self.actionProfile.setIcon(QIcon(localPath + "/../ressources/profileIcon.png"))
+        self.actionAdminPanel.setIcon(QIcon(localPath + "/../ressources/adminPanelIcon.png"))
         self.mainIconLabel.setPixmap(QPixmap(localPath + "/../ressources/mainLogo.jpg"))
         
         self.actionBrowse.triggered.connect(browseTournament)
         self.actionCreate.triggered.connect(lambda: createTournament(1))
         self.actionMyTournaments.triggered.connect(manageMyTournaments)
         self.actionProfile.triggered.connect(lambda: self.userStackedWidget.setCurrentIndex(2))
+        self.actionProfile.triggered.connect(lambda: self.mainStackedWidget.setCurrentIndex(0))
+        self.actionAdminPanel.triggered.connect(lambda: self.mainStackedWidget.setCurrentIndex(1))
         self.hidePushButton.clicked.connect(hideTree)
         self.tableWidget.itemDoubleClicked.connect(tournamentClicked)
         self.doModificationscheckBox.toggled.connect(hideModifications)
@@ -60,7 +67,7 @@ class MonApplication(QMainWindow):
         self.addArbiterPushButton.clicked.connect(lambda: addArbiter())
         self.delLastArbiterPushButton.clicked.connect(lambda: self.arbiterListWidget.takeItem(self.arbiterListWidget.count() - 1))
         self.seeNewPasswordPushButton.clicked.connect(lambda: seeNewPassword())
-        self.downloadDataPushButton.clicked.connect(lambda: downloadData())
+        self.downloadDataPushButton.clicked.connect(lambda: downloadData())        
         
         sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
         self.sortComboBox.addItems(sortingItems)
@@ -111,11 +118,13 @@ def hideModifications(state):
 def browseTournament():
     application.seeMyTournamentsCheckBox.setChecked(False)
     application.userStackedWidget.setCurrentIndex(0)
+    application.mainStackedWidget.setCurrentIndex(0)
 
 def manageMyTournaments():
     if(not(application.seeMyTournamentsCheckBox.isChecked())):
         application.seeMyTournamentsCheckBox.setChecked(True)
     application.userStackedWidget.setCurrentIndex(0)
+    application.mainStackedWidget.setCurrentIndex(0)
     
 def manageMyTournamentsSelect(state: bool) -> None:
     """
@@ -174,6 +183,7 @@ def createTournament(mode: int) -> None:
         application.participantsGroupBox.hide()
         application.createTournamentLabel.setText("Modifier un tournoi")
     application.userStackedWidget.setCurrentIndex(3)
+    application.mainStackedWidget.setCurrentIndex(0)
 
 def makePreview(list: QListWidget) -> None:
     """
@@ -252,7 +262,7 @@ def downloadData() -> None:
     date = "Date de création du compte : " + application.dateLabel.text()
     age = "Âge : " + application.ageLabel.text()
     
-    fileName, _ = QFileDialog.getSaveFileName(None,"Enregistrer mes données", "Mes donnes", "PDF Files (*.pdf)")
+    fileName, _ = QFileDialog.getSaveFileName(None,"Enregistrer mes données", "Mes donnees", "PDF Files (*.pdf)")
     
     if(fileName):
         createPDF.genDataPDF([userName, mail, date, age], fileName)
@@ -282,6 +292,8 @@ if __name__ == '__main__':
     fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]]) # TEMPORAIRE
     
     application.sortComboBox.setCurrentIndex(0)
-    application.resize(QSize(800, 800))
+    application.setMinimumSize(QSize(800, 400))
+    application.setMaximumSize(QSize(800, 800))
+    application.resize(QSize(800, 600))
     
     app.exec_()

@@ -7,8 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>886</height>
+    <height>946</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>946</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Olympic Tournament</string>
@@ -321,7 +327,7 @@ border-radius: 7px;</string>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
-                     <height>250</height>
+                     <height>0</height>
                     </size>
                    </property>
                    <property name="maximumSize">
@@ -505,6 +511,9 @@ border-radius: 7px;</string>
                 <width>369</width>
                 <height>124</height>
                </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
               </property>
               <property name="title">
                <string>Vos informations</string>
@@ -1624,12 +1633,11 @@ border-radius: 7px;</string>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
            <widget class="QGroupBox" name="addAccountGroupBox">
-            <property name="styleSheet">
-             <string notr="true">border: 2px solid white;
-border-radius: 7px;</string>
-            </property>
             <property name="title">
              <string>Ajouter</string>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1644,8 +1652,7 @@ border-radius: 7px;</string>
                 <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
-border-radius: 7px;
-margin-top: 12px;</string>
+border-radius: 7px;</string>
                </property>
                <property name="placeholderText">
                 <string>Nom</string>
@@ -1742,12 +1749,11 @@ border-radius: 7px;</string>
           </item>
           <item>
            <widget class="QGroupBox" name="deleteAccountGroupBox">
-            <property name="styleSheet">
-             <string notr="true">border: 2px solid white;
-border-radius: 7px;</string>
-            </property>
             <property name="title">
              <string>Supprimer</string>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -1762,8 +1768,7 @@ border-radius: 7px;</string>
                 <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
-border-radius: 7px;
-margin-top: 12px;</string>
+border-radius: 7px;</string>
                </property>
                <property name="placeholderText">
                 <string>--Choisir un rôle--</string>
@@ -1865,7 +1870,6 @@ border-radius: 7px;</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="modoPage"/>
      </widget>
     </item>
    </layout>
@@ -1910,6 +1914,8 @@ border-color: rgb(8, 26, 62);</string>
    <addaction name="actionMyTournaments"/>
    <addaction name="separator"/>
    <addaction name="actionProfile"/>
+   <addaction name="separator"/>
+   <addaction name="actionAdminPanel"/>
   </widget>
   <action name="actionProfile">
    <property name="text">
@@ -1941,6 +1947,14 @@ border-color: rgb(8, 26, 62);</string>
    </property>
    <property name="toolTip">
     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Gérer mes tournois&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+   </property>
+  </action>
+  <action name="actionAdminPanel">
+   <property name="text">
+    <string>AdminPanel</string>
+   </property>
+   <property name="toolTip">
+    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;Accéder au panneau d'administration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
    </property>
   </action>
  </widget>

@@ -221,8 +221,14 @@ def defineTournament() -> None:
         message.displayMessageBox(4, "Manque de participants", f"Vous avez entréun nombre impaire de participants ({len(participants)}) à votre tournoi, la création est impossible.")
 
     else:
-        makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate)
-        message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
+        if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
+            message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplie, la création est impossible.")
+        else:
+            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate)
+            message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
+
+    print(startDate, endDate)
+    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.findName(content[0])]])
 
 def fillTournamentTable() -> None:
     """

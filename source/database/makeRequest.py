@@ -125,20 +125,35 @@ def trouver_minimal_id_user():
             return i+2
     return len(lstId)+1
 
-def findName(id : int) -> str:
-    """
+"""def findName(id : int) -> str:
+    
     Fonction renvoyant le nom de l'id donné
 
     argument :
         id : id du compte
-    """
+    
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     cur.execute("SELECT nom FROM User WHERE id = ?", (id,))
     name = cur.fetchall()
     con.commit()
     con.close()
-    return name[0][0]
+    return name[0][0]"""
+
+def getinfo(id : int) -> tuple:
+    """
+    Fonction renvoyant les information de l'id donné
+
+    argument :
+        id : id du compte
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM User WHERE id = ?", (id,))
+    inf = cur.fetchall()
+    con.commit()
+    con.close()
+    return inf
 
 ################# FONCTIONS POUR LA TABLE TournoiArbre
 
@@ -360,3 +375,5 @@ def affichTableTournoiArbre():
     con.close()
     for e in res:
         print(e)
+
+print(getinfo(4)[0][1])

@@ -25,7 +25,7 @@ class MonApplication(QMainWindow):
         self.typeOfUser = int(typeOfUser)
         self.loginId = loginId
         self.hashPassword = hashPassword
-        self.userName = makeRequest.findName(idOfUser)
+        self.userName = makeRequest.getinfo(idOfUser)[0][1]
         
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
@@ -93,7 +93,11 @@ class MonApplication(QMainWindow):
         """
         Procédure qui remplit l'ensemble des labels satiques de l'application et qui dépendent seulement de l'utilisateur
         """
-        self.mailLabel.setText(self.loginId)
+        info = makeRequest.getInfo(self.idOfUser)[0]
+        self.mailLabel.setText(info[2])
+        self.dateLabel.setText(info[5])
+        self.ageLabel.setText(str(info[4]))
+        self.usernameLabel.setText(self.userName)
         
 def tournamentClicked(item):
     if(item.column() == 0):
@@ -229,7 +233,7 @@ def defineTournament() -> None:
             makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
-    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.findName(content[0])]])
+    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getinfo(content[0])[0][1]]])
 
 def fillTournamentTable() -> None:
     """
@@ -239,7 +243,7 @@ def fillTournamentTable() -> None:
     liste = []
     table = makeRequest.getTable("TournoiArbre")
     for e in table:
-        #createur = makeRequest.findName(e[?])
+        #createur = makeRequest.getinfo(e[?])[0][1]
         tournois = [e[1], e[6], e[8], e[9],"à compléter"]
         liste.append(tournois)
 

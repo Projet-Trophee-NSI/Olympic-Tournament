@@ -1192,7 +1192,19 @@ border-radius: 7px;</string>
                  </property>
                 </widget>
                </item>
-               <item row="5" column="0">
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="tournamentArbiterGroupBox">
+              <property name="title">
+               <string>Arbitres</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+              <layout class="QFormLayout" name="formLayout_9">
+               <item row="0" column="0">
                 <widget class="QComboBox" name="arbiterNameComboBox">
                  <property name="minimumSize">
                   <size>
@@ -1239,7 +1251,7 @@ border-radius: 7px;</string>
                  </item>
                 </widget>
                </item>
-               <item row="5" column="1">
+               <item row="0" column="1">
                 <widget class="QListWidget" name="arbiterListWidget">
                  <property name="maximumSize">
                   <size>
@@ -1249,7 +1261,7 @@ border-radius: 7px;</string>
                  </property>
                 </widget>
                </item>
-               <item row="6" column="0">
+               <item row="1" column="0">
                 <widget class="QPushButton" name="addArbiterPushButton">
                  <property name="minimumSize">
                   <size>
@@ -1274,7 +1286,7 @@ border-radius: 7px;</string>
                  </property>
                 </widget>
                </item>
-               <item row="6" column="1">
+               <item row="1" column="1">
                 <widget class="QPushButton" name="delLastArbiterPushButton">
                  <property name="minimumSize">
                   <size>
@@ -1892,7 +1904,9 @@ border-radius: 7px;</string>
     <string notr="true">color: rgb(0, 0, 0);
 border: 2px solid;
 border-radius: 7px;
-border-color: rgb(8, 26, 62);</string>
+border-color: rgb(8, 26, 62);
+border-color: rgb(11, 36, 86);
+background-color: rgb(11, 36, 86);</string>
    </property>
    <property name="iconSize">
     <size>

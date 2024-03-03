@@ -24,7 +24,8 @@ class MonApplication(QMainWindow):
         self.idOfUser = int(idOfUser)
         self.typeOfUser = int(typeOfUser)
         self.loginId = loginId
-        self.hashPassword = hashPassword       
+        self.hashPassword = hashPassword
+        self.userName = "None"       
         
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
@@ -36,7 +37,7 @@ class MonApplication(QMainWindow):
         # Charger l'interface utilisateur dans le widget central
         loadUi(localPath + "/application.ui", self)
         
-        if(self.typeOfUser == 1):
+        if(self.typeOfUser == 0):
             self.actionAdminPanel.setVisible(False)
             for _ in range(2): self.toolBar.removeAction(self.toolBar.actions()[-1])
         
@@ -268,7 +269,7 @@ def downloadData() -> None:
         createPDF.genDataPDF([userName, mail, date, age], fileName)
         os.startfile(fileName) 
     else:
-        message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisie est invalide ou inexistant.")
+        message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisi est invalide ou inexistant.")
 
 if __name__ == '__main__':
     app = QApplication([])

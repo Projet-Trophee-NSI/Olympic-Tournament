@@ -25,7 +25,7 @@ class MonApplication(QMainWindow):
         self.typeOfUser = int(typeOfUser)
         self.loginId = loginId
         self.hashPassword = hashPassword
-        self.userName = "None"       
+        self.userName = makeRequest.findName(idOfUser)
         
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
@@ -205,6 +205,8 @@ def makePreview(list: QListWidget) -> None:
 def defineTournament() -> None:
     """
     Procédure qui récupère les informations du tournoi et les enregistre dans la base de donnée
+
+    MANQUE : nom du créateur
     """
     name = application.tournamentNameLineEdit.text()
     activity = application.tournamentActivityLineEdit.text()
@@ -224,10 +226,9 @@ def defineTournament() -> None:
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplie, la création est impossible.")
         else:
-            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate)
+            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
-    print(startDate, endDate)
     fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.findName(content[0])]])
 
 def fillTournamentTable() -> None:

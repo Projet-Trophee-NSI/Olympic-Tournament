@@ -1,1 +1,4 @@
-# Projet-Trophée-NSI-2024
+# Olympic Tournament
+
+Etapes pour exécuter le logiciel :
+- Exécuter le fichier Python main.py dans le dossier /source

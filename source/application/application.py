@@ -223,13 +223,14 @@ def defineTournament() -> None:
 
     else:
         makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate)
-        message.displayMessageBox(1, "Réussite", "Création du tournoi réussi")
+        message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
 def fillTournamentTable() -> None:
     """
     Procédure qui rempli le tableau contenant l'ensemble des tournois à partir de la base de données
     A COMPLETER    
     """
+    
 
 def fillArbiterComboBox() -> None:
     """

@@ -300,6 +300,32 @@ def trouver_minimal_id_tournoiArbre()->int:
             return i+2
     return len(lstId)+1
 
+def getTable(name):
+    """
+    permet de récuperer tous les attribues de la table d'un nom donné
+
+    argument : 
+        name : nom de la table (str)
+    """
+    if type(name) != str: raise TypeError(f"name must be str not {type(name)}")
+
+    res = False
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    try: 
+        cur.execute(f"SELECT * FROM {name}")
+
+    except: 
+        raise ValueError(f"La table {name} n'existe pas")
+    
+    else:
+        cur.execute("SELECT * FROM user")
+        res = cur.fetchall()
+        con.commit()
+        con.close()
+    
+    return res
+
 #### Fonctions d'aide à la comprehension
 def affichTableUser():
     con = sqlite3.connect(localPathbd + "/storage.db")

@@ -125,6 +125,20 @@ def trouver_minimal_id_user():
             return i+2
     return len(lstId)+1
 
+def findName(id : int) -> str:
+    """
+    Fonction renvoyant le nom de l'id donné
+
+    argument :
+        id : id du compte
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT nom FROM User WHERE id = ?", (id,))
+    name = cur.fetchall()
+    con.commit()
+    con.close()
+    return name[0][0]
 
 ################# FONCTIONS POUR LA TABLE TournoiArbre
 
@@ -300,7 +314,7 @@ def trouver_minimal_id_tournoiArbre()->int:
             return i+2
     return len(lstId)+1
 
-def getTable(name):
+def getTable(name : str) -> list:
     """
     permet de récuperer tous les attribues de la table d'un nom donné
 

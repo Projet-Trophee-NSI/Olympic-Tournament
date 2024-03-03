@@ -226,11 +226,22 @@ def defineTournament() -> None:
         message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
 def fillTournamentTable() -> None:
+    print("fillTournamentTable")
     """
     Procédure qui rempli le tableau contenant l'ensemble des tournois à partir de la base de données
     A COMPLETER    
     """
+    liste = []
+    table = makeRequest.getTable("TournoiArbre")
+    for e in table:
+        print(e)
+        tournois = [e[1], e[6], e[8], e[9],"à compléter"]
+        liste.append(tournois)
+
+    fillTableWidget(liste)
     
+
+
 
 def fillArbiterComboBox() -> None:
     """
@@ -291,7 +302,8 @@ if __name__ == '__main__':
     application = MonApplication(content[0], content[1], content[2], content[3])
     application.show()
     
-    fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]]) # TEMPORAIRE
+    fillTournamentTable()
+    #fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]]) # TEMPORAIRE
     
     application.sortComboBox.setCurrentIndex(0)
     application.setMinimumSize(QSize(800, 400))

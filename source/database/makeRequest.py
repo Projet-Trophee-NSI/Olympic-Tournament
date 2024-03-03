@@ -319,7 +319,7 @@ def getTable(name):
         raise ValueError(f"La table {name} n'existe pas")
     
     else:
-        cur.execute("SELECT * FROM user")
+        cur.execute(f"SELECT * FROM {name}")
         res = cur.fetchall()
         con.commit()
         con.close()

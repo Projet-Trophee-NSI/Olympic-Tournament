@@ -205,7 +205,6 @@ def makePreview(list: QListWidget) -> None:
 def defineTournament() -> None:
     """
     Procédure qui récupère les informations du tournoi et les enregistre dans la base de donnée
-    A COMPLETER
     """
     name = application.tournamentNameLineEdit.text()
     activity = application.tournamentActivityLineEdit.text()
@@ -226,23 +225,19 @@ def defineTournament() -> None:
         message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
 def fillTournamentTable() -> None:
-    print("fillTournamentTable")
     """
     Procédure qui rempli le tableau contenant l'ensemble des tournois à partir de la base de données
-    A COMPLETER    
+    MANQUE : id créateur dans table tournois = e[?]
     """
     liste = []
     table = makeRequest.getTable("TournoiArbre")
     for e in table:
-        print(e)
+        #createur = makeRequest.findName(e[?])
         tournois = [e[1], e[6], e[8], e[9],"à compléter"]
         liste.append(tournois)
 
     fillTableWidget(liste)
     
-
-
-
 def fillArbiterComboBox() -> None:
     """
     Procédure qui rempli le comboBox 'arbiterNameComboBox' contenant l'ensemble des utilisateurs à partir de la base de donnée

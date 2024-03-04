@@ -298,6 +298,7 @@ def updateProfile(object : str, id : int)->None:
     if hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getinfo(id)[0][3]:
         if object == "mdp": 
             modif = hash.hash(application.changePasswordLineEdit.text())
+            if makeRequest.modife_donne_user(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
 
         elif object == "age":
             modif = application.changeAgeSpinBox.value()

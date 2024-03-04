@@ -75,19 +75,33 @@ def modife_donne_user(id : int, valeur: str, colone : str):
     cur = con.cursor()
     val = (valeur,id)
     if colone=="mdp":
-        cur.execute("UPDATE User SET mdp=? WHERE id= ?", val)
+        cur.execute("UPDATE User SET mdp=? WHERE id=?", val)
+        con.commit()
+        con.close()
         return True
     elif colone=="email":
-        cur.execute("UPDATE User SET email=? WHERE id= ?", val)
-        return True
+        lstMail=cur.execute("SELECT email FROM User")
+        con.commit()
+        lstMail = lstMail.fetchall()
+        if not((valeur,) in lstMail):
+            cur.execute("UPDATE User SET email=? WHERE id=?",val)
+            con.commit()
+            con.close()
+            return True
+        return False
     elif colone=="age":
-        cur.execute("UPDATE User SET age=? WHERE id= ?", val)
+        cur.execute("UPDATE User SET age=? WHERE id=?", val)
+        con.commit()
+        con.close()
         return True
     elif colone=="nom":
         lstNom=cur.execute("SELECT nom FROM User")
+        con.commit()
         lstNom = lstNom.fetchall()
-        if not(valeur in lstNom):
-            cur.execute("UPDATE User SET nom=? id=?",val)
+        if not((valeur,) in lstNom):
+            cur.execute("UPDATE User SET nom=? WHERE id=?",val)
+            con.commit()
+            con.close()
             return True
         return False
     con.commit()
@@ -124,21 +138,6 @@ def trouver_minimal_id_user():
         if lstId[i]+1!=lstId[i+1]:
             return i+2
     return len(lstId)+1
-
-"""def findName(id : int) -> str:
-    
-    Fonction renvoyant le nom de l'id donné
-
-    argument :
-        id : id du compte
-    
-    con = sqlite3.connect(localPathbd + "/storage.db")
-    cur = con.cursor()
-    cur.execute("SELECT nom FROM User WHERE id = ?", (id,))
-    name = cur.fetchall()
-    con.commit()
-    con.close()
-    return name[0][0]"""
 
 def getinfo(id : int) -> tuple:
     """
@@ -375,5 +374,3 @@ def affichTableTournoiArbre():
     con.close()
     for e in res:
         print(e)
-
-print(getinfo(4)[0][1])

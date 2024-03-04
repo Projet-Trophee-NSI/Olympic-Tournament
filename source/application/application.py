@@ -17,6 +17,7 @@ import displayMessageBox as message
 import imageViewer
 import createPDF
 import makeRequest
+import hash
 
 class MonApplication(QMainWindow):
     def __init__(self, idOfUser: int, typeOfUser: int, loginId: int, hashPassword: int):
@@ -68,7 +69,11 @@ class MonApplication(QMainWindow):
         self.addArbiterPushButton.clicked.connect(lambda: addArbiter())
         self.delLastArbiterPushButton.clicked.connect(lambda: self.arbiterListWidget.takeItem(self.arbiterListWidget.count() - 1))
         self.seeNewPasswordPushButton.clicked.connect(lambda: seeNewPassword())
-        self.downloadDataPushButton.clicked.connect(lambda: downloadData())        
+        self.downloadDataPushButton.clicked.connect(lambda: downloadData())
+        self.updateUsernamePushButton.clicked.connect(lambda: updateProfile("nom", self.idOfUser))
+        self.updateMailPushButton.clicked.connect(lambda: updateProfile("email", self.idOfUser))
+        self.updateAgePushButton.clicked.connect(lambda: updateProfile("age", self.idOfUser))
+        self.updatePasswordPushButton.clicked.connect(lambda: updateProfile("mdp", self.idOfUser))
         
         sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
         self.sortComboBox.addItems(sortingItems)
@@ -93,7 +98,7 @@ class MonApplication(QMainWindow):
         """
         Procédure qui remplit l'ensemble des labels satiques de l'application et qui dépendent seulement de l'utilisateur
         """
-        info = makeRequest.getInfo(self.idOfUser)[0]
+        info = makeRequest.getinfo(self.idOfUser)[0]
         self.mailLabel.setText(info[2])
         self.dateLabel.setText(info[5])
         self.ageLabel.setText(str(info[4]))
@@ -288,6 +293,30 @@ def downloadData() -> None:
         os.startfile(fileName) 
     else:
         message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisi est invalide ou inexistant.")
+
+def updateProfile(object : str, id : int)->None:
+    if hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getinfo(id)[0][3]:
+        if object == "mdp": 
+            modif = hash.hash(application.changePasswordLineEdit.text())
+
+        elif object == "age":
+            modif = application.changeAgeSpinBox.value()
+            if makeRequest.modife_donne_user(id, modif, object) == True: application.ageLabel.setText(str(modif))
+            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
+
+        elif object == "email":
+            modif = application.changeMailLineEdit.text()
+            if makeRequest.modife_donne_user(id, modif, object) == True: application.mailLabel.setText(modif)
+            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre mail")
+
+        elif object == "nom":
+            modif = application.changeUsernameLineEdit.text()
+            if makeRequest.modife_donne_user(id, modif, object) == True: application.usernameLabel.setText(modif)
+            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre nom")
+
+
+    else: 
+        message.displayMessageBox(4, "Mot de passe incorrect", "Votre mot de passe est incorrect.")
 
 if __name__ == '__main__':
     app = QApplication([])

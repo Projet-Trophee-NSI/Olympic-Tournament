@@ -1,0 +1,9 @@
+Les différents icônes utilisés dans la barre d'outils ont été réalisé par 'Yaicon' et trouvé sur 'Icon-Icons' :
+    - https://icon-icons.com/fr/users/CGZfjaQXjeqCvnXUoBzBC/icon-sets/
+    - https://www.iconfinder.com/yaicon90
+Les différents fichiers concernés sont (dans le dossier /source/ressources) :
+    - 'browseIcon.png'      -> https://icon-icons.com/fr/icone/loupe-recherche-zoom-parcourir-trouver-verre/210803
+    - 'createIcon.png'      -> https://icon-icons.com/fr/icone/ajouter-les-dossiers-donn%C3%A9es-dossier-page-fichier-document-nouveau-papier/210799
+    - 'configureIcon.png'   -> https://icon-icons.com/fr/icone/pr%C3%A9f%C3%A9rences-options-r%C3%A9glage-linterface-utilisateur-la-roue-dent%C3%A9e-configuration-gear-roue-param%C3%A8tres/210824
+    - 'profileIcon.png'     -> https://icon-icons.com/fr/icone/lhomme-daffaires-m%C3%A2le-lhomme-compte-les-gens-profil-personne-avatar-lutilisateur/210812
+    - 'adminPanelIcon.png'  -> https://icon-icons.com/fr/icone/compte-profil-lutilisateur-avatar-lhomme-les-gens-l%C3%A9quipe-groupe-les-utilisateurs/210760

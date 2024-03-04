@@ -35,7 +35,7 @@ color: rgb(255, 255, 255);</string>
         <item>
          <widget class="QStackedWidget" name="userStackedWidget">
           <property name="currentIndex">
-           <number>2</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="browserPage">
            <layout class="QVBoxLayout" name="verticalLayout_5">

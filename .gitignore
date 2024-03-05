@@ -1,3 +1,5 @@
 
 source/database/__pycache__/makeRequest.cpython-311.pyc
 *.pyc
+source/database/__pycache__/makeRequest.cpython-311.pyc
+source/tools/__pycache__/treeGenerator.cpython-311.pyc

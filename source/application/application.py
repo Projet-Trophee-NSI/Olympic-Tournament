@@ -276,9 +276,9 @@ def seeNewPassword() -> None:
     """
     Procédure permettant d'afficher/cacher le texte saisi dans le champ correspondant au nouveau mot de passe dans la page du profil
     """
-    current_mode = application.newPasswordLineEdit.echoMode() #recupère le mode d'affichage actuelle  de passwordLineEdit
+    current_mode = application.changePasswordLineEdit.echoMode() #recupère le mode d'affichage actuelle  de passwordLineEdit
     new_mode = QLineEdit.Normal if current_mode == QLineEdit.Password else QLineEdit.Password #affecte un mode affichage avec : QLineEdit.Normal : Affiche le texte normalement|QLineEdit.Password : Affiche des caractères de remplacement pour masquer le texte
-    application.newPasswordLineEdit.setEchoMode(new_mode) #modifie le mode de l'affichage de passwordLineEdit
+    application.changePasswordLineEdit.setEchoMode(new_mode) #modifie le mode de l'affichage de passwordLineEdit
 
 def downloadData() -> None:
     userName = "Nom d'utilisateur : " + application.usernameLabel.text()

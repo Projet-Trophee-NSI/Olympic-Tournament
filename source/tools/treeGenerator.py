@@ -129,7 +129,7 @@ def createTree(participants: list[str]) -> Node:
     Returns:
         Node: l'arbre binaire représentant l'état initial de l'arbre de tournoi
     """
-    assert(type(participants) == list[str]), "ERREUR : type incorrect pour l'argument 'participants', requis: list[str]"
+    assert(type(participants) == list), "ERREUR : type incorrect pour l'argument 'participants', requis: list[str]"
     
     if(not(participants)):
         return(None)
@@ -157,7 +157,7 @@ def defineWinners(arbre: Node, vainqueurs: list[str]) -> Node:
         Node: l'arbre binaire représentant l'état de la compétition après la victoire des vainqueurs
     """
     assert(type(arbre) == Node), "ERREUR : type incorrect pour l'argument 'arbre', requis: Node"
-    assert(type(vainqueurs) == list[str]), "ERREUR : type incorrect pour l'argument 'participants', requis: list[str]"
+    assert(type(vainqueurs) == list), "ERREUR : type incorrect pour l'argument 'participants', requis: list[str]"
     
     if(arbre.label != "?"):
         return(arbre.label)

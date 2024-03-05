@@ -2,7 +2,7 @@ Les pré-requis necessaires pour exécuter le logiciel Olympic Tournament sont :
 - La bibliothèque PyQt5         -> installable avec la commande 'pip install pyQt5'
 --------------------------------------------------------------------------------------
 - La bibliothèque Graphviz      -> installable avec la commande 'pip install graphviz'
-                                -> et en executant l'executable 'graphviz-10.0.1 (64-bit) EXE installer' disponible sur 'https://graphviz.org/download/'
+                                -> et en exécutant l'exécutable 'graphviz-10.0.1 (64-bit) EXE installer' disponible sur 'https://graphviz.org/download/'
 --------------------------------------------------------------------------------------
 - La bibliothèque FPDF          -> installable avec la commande 'pip install fpdf'
 ======================================================================================

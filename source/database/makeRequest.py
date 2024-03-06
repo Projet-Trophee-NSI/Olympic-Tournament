@@ -328,6 +328,24 @@ def trouver_minimal_id_tournoiArbre()->int:
             return i+2
     return len(lstId)+1
 
+def getInfoTournois(name : str):
+    """
+    Fonction retournant les information d'un tournois
+
+    arguments : 
+        name : nom du tournois
+    """
+
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM tournoiArbre WHERE nom=?", (name,))
+    res = cur.fetchall()
+    con.commit()
+    con.close()
+    return res
+
+
+
 def getTable(name : str) -> list:
     """
     permet de récuperer tous les attribues de la table d'un nom donné

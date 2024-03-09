@@ -5,16 +5,29 @@ import math as mat
 
 localPathbd = os.path.dirname(os.path.abspath(__file__))
 
-#### Pour faire des test
-# con = sqlite3.connect(localPathbd + "/storage.db")
-# cur = con.cursor()
-# cur.execute("ALTER TABLE User RENAME COLUMN mail TO email")
-# con.commit()
-# con.close()
+
+def getTable(name : str) -> list[tuple]:
+    """
+    permet de récuperer tous les attribues de la table d'un nom donné
+    name : nom de la table -> str
+    """
+    if type(name) != str: raise TypeError(f"name must be str not {type(name)}")
+    res = False
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    try: cur.execute(f"SELECT * FROM {name}")
+    except: 
+        raise ValueError(f"La table {name} n'existe pas")
+    else:
+        cur.execute(f"SELECT * FROM {name}")
+        res = cur.fetchall()
+        con.commit()
+        con.close()
+    return res
 
 
 ################# FONCTIONS POUR LA TABLE User
-def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, date: str = datetime.today().strftime('%d-%m-%Y')) -> bool:
+def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, ip : str, date: str = datetime.today().strftime('%d-%m-%Y')) -> bool:
     '''
     Inscrie une nouvelle personne dans la table User
     nom : nom de l'utilisateur -> str
@@ -23,14 +36,15 @@ def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, date: str
     age : age de la personne -> int
     date : date de création du compte -> str
     admin : 0/1 pour savoir si la personne est admin -> int
+    ip : adresse ip de l'utilisateur -> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
     a = cur.execute("SELECT * FROM User WHERE nom= ? ", (nom,))
     a = a.fetchone()
     if a == None :
-        val = (trouver_minimal_id_user(),nom, email, mdp, age, date, admin)
-        cur.execute("INSERT INTO user VALUES(?,?,?,?,?,?,?)", val)
+        val = (trouver_minimal_id_user(),nom, email, mdp, age, date, admin, ip)
+        cur.execute("INSERT INTO user VALUES(?,?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
         return True
@@ -75,33 +89,19 @@ def modife_donne_user(id : int, valeur: str, colone : str):
     cur = con.cursor()
     val = (valeur,id)
     if colone=="mdp":
-        cur.execute("UPDATE User SET mdp=? WHERE id=?", val)
-        con.commit()
-        con.close()
+        cur.execute("UPDATE User SET mdp=? WHERE id= ?", val)
         return True
     elif colone=="email":
-        lstMail=cur.execute("SELECT email FROM User")
-        con.commit()
-        lstMail = lstMail.fetchall()
-        if not((valeur,) in lstMail):
-            cur.execute("UPDATE User SET email=? WHERE id=?",val)
-            con.commit()
-            con.close()
-            return True
-        return False
+        cur.execute("UPDATE User SET email=? WHERE id= ?", val)
+        return True
     elif colone=="age":
-        cur.execute("UPDATE User SET age=? WHERE id=?", val)
-        con.commit()
-        con.close()
+        cur.execute("UPDATE User SET age=? WHERE id= ?", val)
         return True
     elif colone=="nom":
         lstNom=cur.execute("SELECT nom FROM User")
-        con.commit()
         lstNom = lstNom.fetchall()
-        if not((valeur,) in lstNom):
-            cur.execute("UPDATE User SET nom=? WHERE id=?",val)
-            con.commit()
-            con.close()
+        if not(valeur in lstNom):
+            cur.execute("UPDATE User SET nom=? id=?",val)
             return True
         return False
     con.commit()
@@ -139,12 +139,10 @@ def trouver_minimal_id_user():
             return i+2
     return len(lstId)+1
 
-def getinfo(id : int) -> tuple:
+def getinfo(id:int) -> tuple:
     """
-    Fonction renvoyant les information de l'id donné
-
-    argument :
-        id : id du compte
+    Fonction renvoyant toutes les information de l'id donnée
+    id : id du compte -> int
     """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
@@ -153,6 +151,21 @@ def getinfo(id : int) -> tuple:
     con.commit()
     con.close()
     return inf
+
+def getinfoPrecis(id:int, info:str):
+    """
+    Fonction renvoyant l'information demander en lien avec l'id donnée
+
+    id : id du compte -> int
+    info : colone demander -> str
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT "+info+" FROM User WHERE id = ?", (id,))
+    inf = cur.fetchall()
+    con.commit()
+    con.close()
+    return inf[0][0]
 
 ################# FONCTIONS POUR LA TABLE TournoiArbre
 
@@ -327,68 +340,3 @@ def trouver_minimal_id_tournoiArbre()->int:
         if lstId[i]+1!=lstId[i+1]:
             return i+2
     return len(lstId)+1
-
-def getInfoTournois(name : str):
-    """
-    Fonction retournant les information d'un tournois
-
-    arguments : 
-        name : nom du tournois
-    """
-
-    con = sqlite3.connect(localPathbd + "/storage.db")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM tournoiArbre WHERE nom=?", (name,))
-    res = cur.fetchall()
-    con.commit()
-    con.close()
-    return res
-
-
-
-def getTable(name : str) -> list:
-    """
-    permet de récuperer tous les attribues de la table d'un nom donné
-
-    argument : 
-        name : nom de la table (str)
-    """
-    if type(name) != str: raise TypeError(f"name must be str not {type(name)}")
-
-    res = False
-    con = sqlite3.connect(localPathbd + "/storage.db")
-    cur = con.cursor()
-    try: 
-        cur.execute(f"SELECT * FROM {name}")
-
-    except: 
-        raise ValueError(f"La table {name} n'existe pas")
-    
-    else:
-        cur.execute(f"SELECT * FROM {name}")
-        res = cur.fetchall()
-        con.commit()
-        con.close()
-    
-    return res
-
-#### Fonctions d'aide à la comprehension
-def affichTableUser():
-    con = sqlite3.connect(localPathbd + "/storage.db")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM user")
-    res = cur.fetchall()
-    con.commit()
-    con.close()
-    for e in res:
-        print(e)
-
-def affichTableTournoiArbre():
-    con = sqlite3.connect(localPathbd + "/storage.db")
-    cur = con.cursor()
-    cur.execute("SELECT * FROM TournoiArbre")
-    res = cur.fetchall()
-    con.commit()
-    con.close()
-    for e in res:
-        print(e)

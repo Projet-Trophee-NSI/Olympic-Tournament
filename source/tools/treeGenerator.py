@@ -48,7 +48,6 @@ def isEmpty(tree: Node) -> bool:
     Returns:
         bool: Prends pour valeur 'True' si l'arbre est vide et 'False' si l'arbre n'est pas vide
     """
-    assert(type(tree) == Node), "ERREUR : type incorrect pour l'argument 'tree', requis: Node"
     
     return(tree is None)
 
@@ -61,7 +60,7 @@ def addNodes(graph: Digraph, node: Node) -> None:
         node (Node): l'arbre dont la racine est le noeud à ajouter après le précédent (qui sera son parent)
     """
     assert(type(graph) == Digraph), "ERREUR : type incorrect pour l'argument 'graph', requis: Digraph"
-    assert(type(node) == Node), "ERREUR : type incorrect pour l'argument 'node', requis: Node"
+    #assert(type(node) == Node), "ERREUR : type incorrect pour l'argument 'node', requis: Node"
     
     if node is not None:
         # Si l'arbre binaire n'est pas vide, on ajoute sa racine actuelle puis on essaye d'ajouter le sous-arbre gauche et le sous-arbre droit
@@ -78,7 +77,7 @@ def addEdges(graph: Digraph, node: Node) -> None:
         node (Node): l'arbre dont la racine est le noeud d'où part la flèche
     """
     assert(type(graph) == Digraph), "ERREUR : type incorrect pour l'argument 'graph', requis: Digraph"
-    assert(type(node) == Node), "ERREUR : type incorrect pour l'argument 'node', requis: Node"
+    #assert(type(node) == Node), "ERREUR : type incorrect pour l'argument 'node', requis: Node"
     
     if node is not None:
         if node.left is not None:
@@ -100,7 +99,7 @@ def drawBinaryTree(root: Node, viewTree: bool) -> None:
         root (Node): arbre binaire contenant l'ensemble de l'arbre à tracer
         viewTree (bool): si vaut 'True', l'arbre sera affiché après la génération sinon, il ne sera pas affiché
     """
-    assert(type(root) == Node), "ERREUR : type incorrect pour l'argument 'root', requis: Node"
+    #assert(type(root) == Node), "ERREUR : type incorrect pour l'argument 'root', requis: Node"
     assert(type(viewTree) == bool), "ERREUR : type incorrect pour l'argument 'viewTree', requis: bool"
     
     graph = Digraph('G', filename=os.path.dirname(os.path.abspath(__file__)) + "\\treePreview", format="png") # Chemin d'enregistrement de l'image
@@ -156,7 +155,7 @@ def defineWinners(arbre: Node, vainqueurs: list[str]) -> Node:
     Returns:
         Node: l'arbre binaire représentant l'état de la compétition après la victoire des vainqueurs
     """
-    assert(type(arbre) == Node), "ERREUR : type incorrect pour l'argument 'arbre', requis: Node"
+    #assert(type(arbre) == Node), "ERREUR : type incorrect pour l'argument 'arbre', requis: Node"
     assert(type(vainqueurs) == list), "ERREUR : type incorrect pour l'argument 'participants', requis: list[str]"
     
     if(arbre.label != "?"):

@@ -155,7 +155,6 @@ def getinfo(id:int) -> tuple:
 def getinfoPrecis(id:int, info:str):
     """
     Fonction renvoyant l'information demander en lien avec l'id donnée
-
     id : id du compte -> int
     info : colone demander -> str
     """
@@ -166,6 +165,31 @@ def getinfoPrecis(id:int, info:str):
     con.commit()
     con.close()
     return inf[0][0]
+
+def getListeAdmin():
+    """
+    Fonction renvoyant la liste des noms des admin
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT nom FROM User WHERE admin = 1")
+    inf = cur.fetchall()
+    con.commit()
+    con.close()
+    return [e[0] for e in inf]
+
+def getListeUser():
+    """
+    Fonction renvoyant la liste des noms des user
+    """
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT nom FROM User WHERE admin = 0")
+    inf = cur.fetchall()
+    con.commit()
+    con.close()
+    return [e[0] for e in inf]
+
 
 ################# FONCTIONS POUR LA TABLE TournoiArbre
 

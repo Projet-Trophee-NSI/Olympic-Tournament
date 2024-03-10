@@ -1,11 +1,12 @@
 import sqlite3 
 import os
-from datetime import *
+import datetime as dat
 import math as mat
 
 localPathbd = os.path.dirname(os.path.abspath(__file__))
 
 
+################# FONCTIONS GENERAL
 def getTable(name : str) -> list[tuple]:
     """
     permet de récuperer tous les attribues de la table d'un nom donné
@@ -27,7 +28,7 @@ def getTable(name : str) -> list[tuple]:
 
 
 ################# FONCTIONS POUR LA TABLE User
-def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, ip : str, date: str = datetime.today().strftime('%d-%m-%Y')) -> bool:
+def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, ip : str, date: str = dat.datetime.today().strftime('%d-%m-%Y')) -> bool:
     '''
     Inscrie une nouvelle personne dans la table User
     nom : nom de l'utilisateur -> str
@@ -61,8 +62,7 @@ def connect(email : str, mdp : str) -> tuple[bool,int,int]:
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (email,)
-    a = cur.execute("SELECT mdp FROM User WHERE email= ? ", val)
+    a = cur.execute("SELECT mdp FROM User WHERE email= ? ", (email,))
     a = a.fetchone()
     if a == None:
         return False,
@@ -114,8 +114,7 @@ def suprime_donne_user(id:int):
     """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (id,)
-    cur.execute("DELETE FROM User WHERE id=?", val)
+    cur.execute("DELETE FROM User WHERE id=?", (id,))
     con.commit()
     con.close()
 
@@ -127,10 +126,8 @@ def trouver_minimal_id_user():
     cur = con.cursor()
     lstId=cur.execute("SELECT id FROM User")
     lstId=lstId.fetchall()
-    print(lstId)
     lstId=sorted([row[0] for row in lstId])
     con.commit()
-    print(lstId)
     con.close()
     if lstId==None:
         return 1
@@ -196,7 +193,7 @@ def getListeUser():
 ## "[a/b/c/d][][][]"
 ## [[a,b,c,d,m],[],[],[]]
     
-def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str],sport,despcritpion,debut,fin) -> bool:
+def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str],sport,despcritpion,debut,fin,createur) -> bool:
     '''
     cree un nouveau tournoi et revoie si la création a réussie
     nom : nom du tournoi -> str
@@ -212,8 +209,8 @@ def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str
     a = cur.execute("SELECT nom FROM TournoiArbre WHERE nom= ? ", (nom,))
     a = a.fetchone()
     if a == None :
-        val = (trouver_minimal_id_tournoiArbre(),nom,convertLsttoSTR(listeIdArbitre),convertLsttoSTR(listeParticipant),nombreTour(listeParticipant),len(listeParticipant),sport,despcritpion,debut,fin,arbreLISTtoSTR(cree_arbre(listeParticipant,nombreTour(listeParticipant))))
-        cur.execute("INSERT INTO TournoiArbre VALUES(?,?,?,?,?,?,?,?,?,?,?)", val)
+        val = (trouver_minimal_id_tournoiArbre(),nom,convertLsttoSTR(listeIdArbitre),convertLsttoSTR(listeParticipant),nombreTour(listeParticipant),len(listeParticipant),sport,despcritpion,debut,fin,arbreLISTtoSTR(cree_arbre(listeParticipant,nombreTour(listeParticipant))),createur)
+        cur.execute("INSERT INTO TournoiArbre VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
         return True
@@ -320,8 +317,7 @@ def suprime_donne_tournoiArbre(id:int):
     """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    val = (id,)
-    cur.execute("DELETE FROM TournoiArbre WHERE id=?", val)
+    cur.execute("DELETE FROM TournoiArbre WHERE id=?", (id,))
     con.commit()
     con.close()
 
@@ -353,9 +349,7 @@ def trouver_minimal_id_tournoiArbre()->int:
     cur = con.cursor()
     lstId=cur.execute("SELECT id FROM TournoiArbre")
     lstId=lstId.fetchall()
-    print(lstId)
     lstId=sorted([row[0] for row in lstId])
-    print(lstId)
     con.commit()
     con.close()
     if lstId==None:

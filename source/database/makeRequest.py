@@ -15,11 +15,11 @@ def getTable(name : str) -> list[tuple]:
     res = False
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    try: cur.execute(f"SELECT * FROM {name}")
+    try: cur.execute("SELECT * FROM "+name)
     except: 
-        raise ValueError(f"La table {name} n'existe pas")
+        raise ValueError("La table "+name+" n'existe pas")
     else:
-        cur.execute(f"SELECT * FROM {name}")
+        cur.execute("SELECT * FROM "+name)
         res = cur.fetchall()
         con.commit()
         con.close()

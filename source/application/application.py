@@ -110,8 +110,16 @@ class MonApplication(QMainWindow):
         
 def tournamentClicked(item):
     if(item.column() == 0):
+        test = makeRequest.getInfoTournois(item.text())[0]
+        equipe = makeRequest.convertSTRtoLst(test[3])
+        for e in equipe:
+            application.playersListWidget.addItem(e)
+        
+        treeGenerator.drawBinaryTree(treeGenerator.createTree(list(equipe)), True)
         application.tournamentNameLabel.setText(item.text())
-        ## COMPLETER L'ENSEMBLE DES INFORMATIONS DE LA PAGE VISUALISATION AVEC LA BDD ET 'treeGenerator'
+        application.detailsTextEdit.setText(test[7])
+        application.startLabel_2.setText(str(test[8]))
+        application.endLabel_2.setText(str(test[9]))
         application.userStackedWidget.setCurrentIndex(1)
     else:
         filterTablesElements([item.text()])
@@ -239,7 +247,7 @@ def defineTournament() -> None:
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplie, la création est impossible.")
         else:
-            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate) #ajout nom créateur
+            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
     fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
@@ -253,7 +261,7 @@ def fillTournamentTable() -> None:
     table = makeRequest.getTable("TournoiArbre")
     for e in table:
         #createur = makeRequest.getinfo(e[?])[0][1]
-        tournois = [e[1], e[6], e[8], e[9],"à compléter"]
+        tournois = [e[1], e[6], e[8], e[9],e[11]]
         liste.append(tournois)
 
     fillTableWidget(liste)
@@ -300,26 +308,24 @@ def downloadData() -> None:
         message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisi est invalide ou inexistant.")
 
 def updateProfile(object : str, id : int)->None:
-    if hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getInfo(id)[0][3]:
-        if object == "mdp": 
-            modif = hash.hash(application.changePasswordLineEdit.text())
-            if makeRequest.modife_donne_user(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
+    if object == "age":
+        modif = application.changeAgeSpinBox.value()
+        if makeRequest.modife_donne_user(id, modif, object) == True: application.ageLabel.setText(str(modif))
+        else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
 
-        elif object == "age":
-            modif = application.changeAgeSpinBox.value()
-            if makeRequest.modife_donne_user(id, modif, object) == True: application.ageLabel.setText(str(modif))
-            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
+    elif object == "email":
+        modif = application.changeMailLineEdit.text()
+        if makeRequest.modife_donne_user(id, modif, object) == True: application.mailLabel.setText(modif)
+        else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre mail")
 
-        elif object == "email":
-            modif = application.changeMailLineEdit.text()
-            if makeRequest.modife_donne_user(id, modif, object) == True: application.mailLabel.setText(modif)
-            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre mail")
+    elif object == "nom":
+        modif = application.changeUsernameLineEdit.text()
+        if makeRequest.modife_donne_user(id, modif, object) == True: application.usernameLabel.setText(modif)
+        else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre nom")
 
-        elif object == "nom":
-            modif = application.changeUsernameLineEdit.text()
-            if makeRequest.modife_donne_user(id, modif, object) == True: application.usernameLabel.setText(modif)
-            else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre nom")
-
+    elif hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getInfo(id)[0][3] and object == "mdp":
+        modif = hash.hash(application.changePasswordLineEdit.text())
+        if makeRequest.modife_donne_user(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
 
     else: 
         message.displayMessageBox(4, "Mot de passe incorrect", "Votre mot de passe est incorrect.")

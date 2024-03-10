@@ -16,11 +16,10 @@ def getTable(name : str) -> list[tuple]:
     res = False
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    try: cur.execute("SELECT * FROM "+name)
+    try: cur.execute("SELECT * FROM " + name)
     except: 
-        raise ValueError("La table "+name+" n'existe pas")
+        raise ValueError("La table " + name + " n'existe pas")
     else:
-        cur.execute("SELECT * FROM "+name)
         res = cur.fetchall()
         con.commit()
         con.close()
@@ -90,18 +89,26 @@ def modife_donne_user(id : int, valeur: str, colone : str):
     val = (valeur,id)
     if colone=="mdp":
         cur.execute("UPDATE User SET mdp=? WHERE id= ?", val)
+        con.commit()
+        con.close()
         return True
     elif colone=="email":
         cur.execute("UPDATE User SET email=? WHERE id= ?", val)
+        con.commit()
+        con.close()
         return True
     elif colone=="age":
         cur.execute("UPDATE User SET age=? WHERE id= ?", val)
+        con.commit()
+        con.close()
         return True
     elif colone=="nom":
         lstNom=cur.execute("SELECT nom FROM User")
         lstNom = lstNom.fetchall()
         if not(valeur in lstNom):
-            cur.execute("UPDATE User SET nom=? id=?",val)
+            cur.execute("UPDATE User SET nom=? WHERE id=?",val)
+            con.commit()
+            con.close()
             return True
         return False
     con.commit()
@@ -157,7 +164,7 @@ def getInfoPrecis(id:int, info:str):
     """
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
-    cur.execute("SELECT "+info+" FROM User WHERE id = ?", (id,))
+    cur.execute("SELECT " + info + " FROM User WHERE id = ?", (id,))
     inf = cur.fetchall()
     con.commit()
     con.close()
@@ -203,6 +210,7 @@ def cree_TournoiArbre(nom:str,listeIdArbitre:list[int],listeParticipant:list[str
     description : description du tournoie -> str
     debut : date de début du tournoie -> str
     fin : date de fin du trounoie -> str
+    createur : nom du créateur du tournois -> str
     '''
     con = sqlite3.connect(localPathbd + "/storage.db")
     cur = con.cursor()
@@ -358,3 +366,18 @@ def trouver_minimal_id_tournoiArbre()->int:
         if lstId[i]+1!=lstId[i+1]:
             return i+2
     return len(lstId)+1
+
+def getInfoTournois(name : str):
+    """
+    Fonction retournant les information d'un tournois
+    arguments : 
+        name : nom du tournois
+    """
+
+    con = sqlite3.connect(localPathbd + "/storage.db")
+    cur = con.cursor()
+    cur.execute("SELECT * FROM tournoiArbre WHERE nom=?", (name,))
+    res = cur.fetchall()
+    con.commit()
+    con.close()
+    return res

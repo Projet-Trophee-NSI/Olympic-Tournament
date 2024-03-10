@@ -380,16 +380,6 @@ border-radius: 7px;</string>
                   <height>350</height>
                  </size>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>Equipe 1</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>Equipe 2</string>
-                 </property>
-                </item>
                </widget>
               </item>
              </layout>

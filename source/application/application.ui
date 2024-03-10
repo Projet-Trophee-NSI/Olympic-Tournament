@@ -565,7 +565,6 @@ border-radius: 7px;</string>
                     <widget class="QLabel" name="usernameLabel">
                      <property name="font">
                       <font>
-                       <weight>75</weight>
                        <bold>true</bold>
                       </font>
                      </property>
@@ -578,7 +577,6 @@ border-radius: 7px;</string>
                     <widget class="QLabel" name="mailLabel">
                      <property name="font">
                       <font>
-                       <weight>75</weight>
                        <bold>true</bold>
                       </font>
                      </property>
@@ -591,7 +589,6 @@ border-radius: 7px;</string>
                     <widget class="QLabel" name="dateLabel">
                      <property name="font">
                       <font>
-                       <weight>75</weight>
                        <bold>true</bold>
                       </font>
                      </property>
@@ -604,7 +601,6 @@ border-radius: 7px;</string>
                     <widget class="QLabel" name="ageLabel">
                      <property name="font">
                       <font>
-                       <weight>75</weight>
                        <bold>true</bold>
                       </font>
                      </property>
@@ -1650,7 +1646,7 @@ border-radius: 7px;</string>
           <item>
            <widget class="QGroupBox" name="addAccountGroupBox">
             <property name="title">
-             <string>Ajouter</string>
+             <string>Ajouter un administrateur</string>
             </property>
             <property name="flat">
              <bool>true</bool>
@@ -1702,20 +1698,26 @@ border-radius: 7px;</string>
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="roleAddComboBox">
+              <widget class="QSpinBox" name="ageAddSpinBox">
                <property name="styleSheet">
                 <string notr="true">color: rgb(0, 0, 0);
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
 border-radius: 7px;</string>
                </property>
-               <property name="placeholderText">
-                <string>--Choisir un rôle--</string>
+               <property name="suffix">
+                <string> ans</string>
+               </property>
+               <property name="minimum">
+                <number>15</number>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="verificationAddCheckBox">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="styleSheet">
                 <string notr="true">border: 0px solid white;</string>
                </property>
@@ -1728,6 +1730,9 @@ border-radius: 7px;</string>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <item>
                 <widget class="QPushButton" name="addPushButton">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>75</width>
@@ -1735,9 +1740,9 @@ border-radius: 7px;</string>
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">color: rgb(0, 135, 0);
-background-color: rgb(255, 255, 255);
-border: 2px solid white;
+                  <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(150, 150, 150);
+border: 2px solid rgb(99, 99, 99);
 border-radius: 7px;</string>
                  </property>
                  <property name="text">
@@ -1896,7 +1901,7 @@ border-radius: 7px;</string>
      <x>0</x>
      <y>0</y>
      <width>1090</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
@@ -1986,11 +1991,11 @@ background-color: rgb(11, 36, 86);</string>
    <hints>
     <hint type="sourcelabel">
      <x>359</x>
-     <y>73</y>
+     <y>74</y>
     </hint>
     <hint type="destinationlabel">
      <x>201</x>
-     <y>73</y>
+     <y>74</y>
     </hint>
    </hints>
   </connection>

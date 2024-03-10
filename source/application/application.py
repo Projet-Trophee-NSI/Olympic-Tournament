@@ -18,6 +18,7 @@ import imageViewer
 import createPDF
 import makeRequest
 import hash
+import getIP
 
 class MonApplication(QMainWindow):
     def __init__(self, idOfUser: int, typeOfUser: int, loginId: int, hashPassword: int):
@@ -26,7 +27,8 @@ class MonApplication(QMainWindow):
         self.typeOfUser = int(typeOfUser)
         self.loginId = loginId
         self.hashPassword = hashPassword
-        self.userName = makeRequest.getinfo(idOfUser)[0][1]
+        self.userName = makeRequest.getInfoPrecis(idOfUser, "nom")
+        self.ipAddress = getIP.getIpAddress()
         
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
@@ -74,6 +76,8 @@ class MonApplication(QMainWindow):
         self.updateMailPushButton.clicked.connect(lambda: updateProfile("email", self.idOfUser))
         self.updateAgePushButton.clicked.connect(lambda: updateProfile("age", self.idOfUser))
         self.updatePasswordPushButton.clicked.connect(lambda: updateProfile("mdp", self.idOfUser))
+        self.addPushButton.clicked.connect(lambda: getRegisterAdmin())
+        self.verificationAddCheckBox.toggled.connect(sureToAddAdmin)
         
         sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
         self.sortComboBox.addItems(sortingItems)
@@ -98,8 +102,8 @@ class MonApplication(QMainWindow):
         """
         Procédure qui remplit l'ensemble des labels satiques de l'application et qui dépendent seulement de l'utilisateur
         """
-        info = makeRequest.getinfo(self.idOfUser)[0]
-        self.mailLabel.setText(info[2])
+        info = makeRequest.getInfo(self.idOfUser)[0]
+        self.mailLabel.setText(self.loginId)
         self.dateLabel.setText(info[5])
         self.ageLabel.setText(str(info[4]))
         self.usernameLabel.setText(self.userName)
@@ -238,7 +242,7 @@ def defineTournament() -> None:
             makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
 
-    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getinfo(content[0])[0][1]]])
+    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
 
 def fillTournamentTable() -> None:
     """
@@ -285,17 +289,18 @@ def downloadData() -> None:
     mail = "Courrier électronique : " + application.loginId
     date = "Date de création du compte : " + application.dateLabel.text()
     age = "Âge : " + application.ageLabel.text()
+    ip = "Adresse IP : " + application.ipAddress
     
     fileName, _ = QFileDialog.getSaveFileName(None,"Enregistrer mes données", "Mes donnees", "PDF Files (*.pdf)")
     
     if(fileName):
-        createPDF.genDataPDF([userName, mail, date, age], fileName)
+        createPDF.genDataPDF([userName, mail, date, age, ip], fileName)
         os.startfile(fileName) 
     else:
         message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisi est invalide ou inexistant.")
 
 def updateProfile(object : str, id : int)->None:
-    if hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getinfo(id)[0][3]:
+    if hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getInfo(id)[0][3]:
         if object == "mdp": 
             modif = hash.hash(application.changePasswordLineEdit.text())
             if makeRequest.modife_donne_user(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
@@ -319,6 +324,31 @@ def updateProfile(object : str, id : int)->None:
     else: 
         message.displayMessageBox(4, "Mot de passe incorrect", "Votre mot de passe est incorrect.")
 
+def getRegisterAdmin() -> None:
+    """
+    Procédure qui inscrit les données saisies dans la base de donnée
+    """
+    pseudo = application.nameAddLineEdit.text()
+    email = application.mailAddLineEdit.text()
+    password = application.passwordAddLineEdit.text()
+    age = application.ageAddSpinBox.value()
+    ip = "compte créé par '" + str(getIP.getIpAddress()) + "'"
+    
+    if(pseudo != "" and password != "" and email != ""):
+        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 1, ip) == True:
+            message.displayMessageBox(2, "Inscription réussie", "L'inscription est réussie, " +
+                                      "vous pouvez dès maintenant donner ces identifiants au nouvel administrateur pour qu'il/elle se connecte via la page de connexion." + 
+                                      "Les identifiants de connexion sont : \n- Identifiant : " + email + "\n- Mot de passe : " + password + "(à conserver secret)")
+        else:
+            message.displayMessageBox(4, "Erreur d'inscription", "L'inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")
+    else:
+        message.displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
+
+def sureToAddAdmin(state: bool) -> None:
+    application.addPushButton.setEnabled(state)
+    if(state): application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
+    else: application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")
+
 if __name__ == '__main__':
     app = QApplication([])
     
@@ -334,6 +364,7 @@ if __name__ == '__main__':
     os.remove(localPath + "/temp.tmp")
     
     content = content.split(";")
+    print(content)
     
     application = MonApplication(content[0], content[1], content[2], content[3])
     application.show()

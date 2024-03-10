@@ -6,7 +6,7 @@ import math as mat
 localPathbd = os.path.dirname(os.path.abspath(__file__))
 
 
-################# FONCTIONS GENERAL
+################# FONCTIONS GENERALES
 def getTable(name : str) -> list[tuple]:
     """
     permet de récuperer tous les attribues de la table d'un nom donné
@@ -136,7 +136,7 @@ def trouver_minimal_id_user():
             return i+2
     return len(lstId)+1
 
-def getinfo(id:int) -> tuple:
+def getInfo(id:int) -> tuple:
     """
     Fonction renvoyant toutes les information de l'id donnée
     id : id du compte -> int
@@ -149,7 +149,7 @@ def getinfo(id:int) -> tuple:
     con.close()
     return inf
 
-def getinfoPrecis(id:int, info:str):
+def getInfoPrecis(id:int, info:str):
     """
     Fonction renvoyant l'information demander en lien avec l'id donnée
     id : id du compte -> int

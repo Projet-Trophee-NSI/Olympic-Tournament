@@ -19,6 +19,7 @@ sys.path.insert(0, localPath + "/../tools")
 import makeRequest
 import hash
 import displayMessageBox as message
+import getIP
 
 
 class MonApplication(QMainWindow):
@@ -113,9 +114,10 @@ def getRegister() -> None:
     password = connectAppWindow.windowContent.passwordLineEditPage2.text()
     email = connectAppWindow.windowContent.idLineEditPage2.text()
     age = connectAppWindow.windowContent.ageSpinBoxPage2.value()
+    ip = str(getIP.getIpAddress())
     
     if(pseudo != "" and password != "" and email != ""):
-        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 0) == True:
+        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 0, ip) == True:
             message.displayMessageBox(2, "Inscription réussie", "Votre inscription est réussie, vous pouvez dès maintenant vous connecter via la page de connexion.")
         else:
             message.displayMessageBox(4, "Erreur d'inscription", "Votre inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")

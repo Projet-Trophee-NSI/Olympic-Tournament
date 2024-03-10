@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QFrame
+from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QFrame
 from PyQt5.QtGui import QPixmap, QPainter, QBrush, QColor
 from PyQt5.QtCore import Qt, QRectF
 import sys
@@ -7,6 +7,10 @@ import os
 localPath = os.path.dirname(os.path.abspath(__file__))
 
 class ImageViewer(QGraphicsView):
+    """
+    Classe héritée de 'QGraphicsView' et modifie ce dernier pour
+    donner à l'utilisateur la possibilté de se déplacer dans l'image
+    """
     def __init__(self, parent=None):
         super(ImageViewer, self).__init__(parent)
         self._zoom = 0
@@ -63,10 +67,3 @@ class ImageViewer(QGraphicsView):
                 self.fitInView()
             else:
                 self._zoom = 0
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    viewer = ImageViewer()
-    viewer.setPhoto(QPixmap('/chemin/vers/votre/image.jpg'))
-    viewer.show()
-    sys.exit(app.exec_())

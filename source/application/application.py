@@ -110,6 +110,7 @@ class MonApplication(QMainWindow):
         
 def tournamentClicked(item):
     if(item.column() == 0):
+        application.playersListWidget.clear()
         test = makeRequest.getInfoTournois(item.text())[0]
         equipe = makeRequest.convertSTRtoLst(test[3])
         for e in equipe:
@@ -255,12 +256,10 @@ def defineTournament() -> None:
 def fillTournamentTable() -> None:
     """
     Procédure qui rempli le tableau contenant l'ensemble des tournois à partir de la base de données
-    MANQUE : id créateur dans table tournois = e[?]
     """
     liste = []
     table = makeRequest.getTable("TournoiArbre")
     for e in table:
-        #createur = makeRequest.getinfo(e[?])[0][1]
         tournois = [e[1], e[6], e[8], e[9],e[11]]
         liste.append(tournois)
 

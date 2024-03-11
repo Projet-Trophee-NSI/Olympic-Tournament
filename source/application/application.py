@@ -116,7 +116,9 @@ def tournamentClicked(item):
         for e in equipe:
             application.playersListWidget.addItem(e)
         
-        treeGenerator.drawBinaryTree(treeGenerator.createTree(list(equipe)), True)
+        treeGenerator.drawBinaryTree(treeGenerator.createTree(list(equipe)), False)
+        application.iw.setPhoto(QPixmap(localPath + "\\treeView.png"))
+        os.remove(localPath + "\\treeView.png")
         application.tournamentNameLabel.setText(item.text())
         application.detailsTextEdit.setText(test[7])
         application.startLabel_2.setText(str(test[8]))
@@ -369,7 +371,6 @@ if __name__ == '__main__':
     os.remove(localPath + "/temp.tmp")
     
     content = content.split(";")
-    print(content)
     
     application = MonApplication(content[0], content[1], content[2], content[3])
     application.show()

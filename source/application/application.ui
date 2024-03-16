@@ -1198,34 +1198,12 @@ border-radius: 7px;</string>
                  <property name="editable">
                   <bool>true</bool>
                  </property>
+                 <property name="currentText">
+                  <string>-- Sélectionnez un arbitre --</string>
+                 </property>
                  <property name="placeholderText">
                   <string>Saisissez le nom d'un arbitre</string>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string>Antoine</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Mattéo</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Titouan</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Lucas</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Axel</string>
-                  </property>
-                 </item>
                 </widget>
                </item>
                <item row="0" column="1">
@@ -1693,7 +1671,7 @@ border-radius: 7px;</string>
              <item>
               <widget class="QCheckBox" name="verificationAddCheckBox">
                <property name="enabled">
-                <bool>false</bool>
+                <bool>true</bool>
                </property>
                <property name="styleSheet">
                 <string notr="true">border: 0px solid white;</string>
@@ -1768,8 +1746,14 @@ background-color: rgb(255, 255, 255);
 border: 2px solid white;
 border-radius: 7px;</string>
                </property>
+               <property name="editable">
+                <bool>false</bool>
+               </property>
+               <property name="currentText">
+                <string/>
+               </property>
                <property name="placeholderText">
-                <string>--Choisir un rôle--</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -1780,6 +1764,12 @@ border-radius: 7px;</string>
 background-color: rgb(255, 255, 255);
 border: 2px solid white;
 border-radius: 7px;</string>
+               </property>
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <property name="currentText">
+                <string>--Choisir le compte--</string>
                </property>
                <property name="placeholderText">
                 <string>--Choisir le compte--</string>
@@ -1807,9 +1797,9 @@ border-radius: 7px;</string>
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">color: rgb(193, 0, 0);
-background-color: rgb(255, 255, 255);
-border: 2px solid white;
+                  <string notr="true">background-color: rgb(99, 99, 99);
+color: rgb(150, 150, 150);
+border: 2px solid rgb(99, 99, 99);
 border-radius: 7px;</string>
                  </property>
                  <property name="text">
@@ -1968,11 +1958,11 @@ background-color: rgb(11, 36, 86);</string>
    <hints>
     <hint type="sourcelabel">
      <x>359</x>
-     <y>74</y>
+     <y>492</y>
     </hint>
     <hint type="destinationlabel">
-     <x>201</x>
-     <y>74</y>
+     <x>465</x>
+     <y>490</y>
     </hint>
    </hints>
   </connection>
@@ -1984,11 +1974,11 @@ background-color: rgb(11, 36, 86);</string>
    <hints>
     <hint type="sourcelabel">
      <x>359</x>
-     <y>74</y>
+     <y>726</y>
     </hint>
     <hint type="destinationlabel">
-     <x>201</x>
-     <y>74</y>
+     <x>465</x>
+     <y>724</y>
     </hint>
    </hints>
   </connection>

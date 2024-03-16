@@ -51,6 +51,12 @@ class MonApplication(QMainWindow):
         self.actionAdminPanel.setIcon(QIcon(localPath + "/../ressources/adminPanelIcon.png"))
         self.mainIconLabel.setPixmap(QPixmap(localPath + "/../ressources/mainLogo.jpg"))
         
+        sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
+        self.sortComboBox.addItems(sortingItems)
+        
+        self.roleDelComboBox.addItems(["Utilisateur", "Administrateur"])
+        self.accountDelComboBox.addItems(makeRequest.getListeUser())
+        
         self.actionBrowse.triggered.connect(browseTournament)
         self.actionCreate.triggered.connect(lambda: createTournament(1))
         self.actionMyTournaments.triggered.connect(manageMyTournaments)
@@ -77,10 +83,10 @@ class MonApplication(QMainWindow):
         self.updateAgePushButton.clicked.connect(lambda: updateProfile("age", self.idOfUser))
         self.updatePasswordPushButton.clicked.connect(lambda: updateProfile("mdp", self.idOfUser))
         self.addPushButton.clicked.connect(lambda: getRegisterAdmin())
+        self.delPushButton.clicked.connect(lambda: delUserAdmin())
         self.verificationAddCheckBox.toggled.connect(sureToAddAdmin)
-        
-        sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
-        self.sortComboBox.addItems(sortingItems)
+        self.verificationDelCheckBox.toggled.connect(sureToDelUserAdmin)
+        self.roleDelComboBox.currentIndexChanged.connect(fillAdminPanelCombobox)
         
         self.tableWidget.setSortingEnabled(True)
         
@@ -89,12 +95,12 @@ class MonApplication(QMainWindow):
         
         self.onLogin()
         
-        ## TEMPORAIRE
+        """## TEMPORAIRE
         self.iw = imageViewer.ImageViewer()
         self.iw.setPhoto(QPixmap(localPath + "/../tools/treePreview.png"))
         self.verticalLayout_7.addWidget(self.iw)
         self.iw.show()
-        ## TEMPORAIRE
+        ## TEMPORAIRE"""
         
         self.modifyGroupBox.hide()
         
@@ -207,6 +213,8 @@ def createTournament(mode: int) -> None:
         application.delTournamentGroupBox.show()
         application.participantsGroupBox.hide()
         application.createTournamentLabel.setText("Modifier un tournoi")
+    
+    application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
     application.userStackedWidget.setCurrentIndex(3)
     application.mainStackedWidget.setCurrentIndex(0)
 
@@ -351,10 +359,27 @@ def getRegisterAdmin() -> None:
     else:
         message.displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
 
+def delUserAdmin() -> None:
+    table = makeRequest.getTable("User")
+    for e in table:
+        if(e[1] == application.accountDelComboBox.currentText()): makeRequest.suprime_donne_user(e[0])
+
 def sureToAddAdmin(state: bool) -> None:
     application.addPushButton.setEnabled(state)
     if(state): application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
-    else: application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")
+    else: application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")    
+
+def fillAdminPanelCombobox(index: int) -> None:
+    application.accountDelComboBox.clear()
+    if(index == 0):
+        application.accountDelComboBox.addItems(makeRequest.getListeUser())
+    elif(index == 1):
+        application.accountDelComboBox.addItems(makeRequest.getListeAdmin())
+
+def sureToDelUserAdmin(state: bool) -> None:
+    application.delPushButton.setEnabled(state)
+    if(state): application.delPushButton.setStyleSheet("color: rgb(193, 0, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
+    else: application.delPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")
 
 if __name__ == '__main__':
     app = QApplication([])

@@ -5,6 +5,8 @@ Les pré-requis necessaires pour exécuter le logiciel Olympic Tournament sont :
                                 -> et en exécutant l'exécutable 'graphviz-10.0.1 (64-bit) EXE installer' disponible sur 'https://graphviz.org/download/'
 --------------------------------------------------------------------------------------
 - La bibliothèque FPDF          -> installable avec la commande 'pip install fpdf'
+--------------------------------------------------------------------------------------
+- La bibliothèque requests      -> installable avec la commande 'pip install requests'
 ======================================================================================
 Notez que pour que les commandes pip fonctionnent ils faut que vous ayez une version de Python (version 3) d'installée
 et que pip soit installé, si ce n'est pas le cas, vous pouvez exécuter cette commande pour installer pip : 'pip install pip'

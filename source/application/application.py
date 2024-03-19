@@ -95,8 +95,11 @@ class MonApplication(QMainWindow):
         
         self.onLogin()
         
-        """## TEMPORAIRE
         self.iw = imageViewer.ImageViewer()
+        self.verticalLayout_7.addWidget(self.iw)
+        self.iw.show()
+        
+        """## TEMPORAIRE
         self.iw.setPhoto(QPixmap(localPath + "/../tools/treePreview.png"))
         self.verticalLayout_7.addWidget(self.iw)
         self.iw.show()

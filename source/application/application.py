@@ -168,7 +168,15 @@ def manageMyTournamentsSelect(state: bool) -> None:
         state (bool): Etat de la case, si elle est cochée alors on filtre
     """
     if(state):
-        pass # Afficher les tournois que l'utilisateur a créé
+        application.tableWidget.setRowCount(0)
+        liste = makeRequest.getTable("TournoiArbre")
+        for tournois in liste:
+            arb = tournois[2]
+            crea = tournois[-1]
+            if (application.userName in arb) or (application.userName==crea): 
+                fillTableWidget([[tournois[1],tournois[6],tournois[8],tournois[9],tournois[-1]]])
+
+    else: fillTournamentTable()
             
 def fillTableWidget(elements: list[list[str]]) -> None:
     for i in range(len(elements)):

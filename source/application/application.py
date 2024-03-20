@@ -69,7 +69,12 @@ class MonApplication(QMainWindow):
         self.seeMyTournamentsCheckBox.toggled.connect(manageMyTournamentsSelect)
         self.sortComboBox.currentIndexChanged.connect(sortTablesElements)
         self.searchLineEdit.textChanged.connect(searchTournament)
+        self.configurePushButton.clicked.connect(lambda : createTournament(2, self.tournamentNameLabel.text()))
+        self.winnersAddPushButton.clicked.connect(lambda : addWinner(self.tournamentNameLabel.text()))
         self.addParticipantsPushButton.clicked.connect(lambda: addParticipants())
+        self.seeTreePushButton.clicked.connect(lambda : seeArbre(self.tournamentNameLabel.text()))
+        self.previewPushButton_2.clicked.connect(lambda : seeArbre(self.tournamentNameLabel.text(), 2))
+        self.delTournamentPushButton.clicked.connect(lambda : delTournois(self.tournamentNameLabel.text()))
         self.delLastElementPushButton.clicked.connect(lambda: self.participantsListListWidget.takeItem(self.participantsListListWidget.count() - 1))
         self.previewPushButton.clicked.connect(lambda: makePreview(self.participantsListListWidget))
         self.startDateEdit.dateChanged.connect(lambda _: self.endDateEdit.setMinimumDate(self.startDateEdit.date()))
@@ -176,8 +181,10 @@ def manageMyTournamentsSelect(state: bool) -> None:
             if (application.userName in arb) or (application.userName==crea): 
                 fillTableWidget([[tournois[1],tournois[6],tournois[8],tournois[9],tournois[-1]]])
 
-    else: fillTournamentTable()
-            
+    else: 
+        application.tableWidget.setRowCount(0)
+        fillTournamentTable()
+
 def fillTableWidget(elements: list[list[str]]) -> None:
     for i in range(len(elements)):
         application.tableWidget.insertRow(i)
@@ -213,21 +220,90 @@ def sortTablesElements(sort: int):
 
 def searchTournament(searchedText: str) -> None: filterTablesElements(searchedText.split())
 
-def createTournament(mode: int) -> None:
+def createTournament(mode: int, name = None) -> None:
     if(mode == 1):
         application.winnerGroupBox.hide()
         application.delTournamentGroupBox.hide()
+        application.startDateEdit.setMinimumDate(QDate.currentDate())
+        application.endDateEdit.setMinimumDate(QDate.currentDate())
+        application.tournamentNameLineEdit.setText("")
+        application.tournamentActivityLineEdit.setText("")
+        application.tournamentResumeTextEdit.setText("")
         application.participantsGroupBox.show()
         application.createTournamentLabel.setText("Créer un nouveau tournoi")
+        application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
+        application.userStackedWidget.setCurrentIndex(3)
+        application.mainStackedWidget.setCurrentIndex(0)
     elif(mode == 2):
-        application.winnerGroupBox.show()
-        application.delTournamentGroupBox.show()
-        application.participantsGroupBox.hide()
-        application.createTournamentLabel.setText("Modifier un tournoi")
+        infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+        arb = makeRequest.convertSTRtoLst(infoTournoi[2])
+        if (application.userName in arb) or (application.userName == infoTournoi[-1]):
+            startDate = infoTournoi[8].split("/")
+            endDate = infoTournoi[9].split("/")
+            startDate = QDate(int(startDate[2]), int(startDate[1]), int(startDate[0]))
+            endDate = QDate(int(endDate[2]), int(endDate[1]), int(endDate[0]))
+            application.tournamentNameLineEdit.setText(infoTournoi[1])
+            application.tournamentActivityLineEdit.setText(infoTournoi[6])
+            application.tournamentResumeTextEdit.setText(infoTournoi[7])
+            application.startDateEdit.setMinimumDate(startDate)
+            application.endDateEdit.setMinimumDate(endDate)
+            application.startDateEdit.setDate(startDate)
+            application.endDateEdit.setDate(endDate)
+            for e in arb:
+                application.arbiterListWidget.addItem(e)
+
+            for e in makeRequest.convertSTRtoLst(infoTournoi[3]):
+                application.participantsListListWidget_2.addItem(e)
+            application.winnerGroupBox.show()
+            application.delTournamentGroupBox.show()
+            application.participantsGroupBox.hide()
+            application.createTournamentLabel.setText("Modifier un tournoi")
+            application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
+            application.userStackedWidget.setCurrentIndex(3)
+            application.mainStackedWidget.setCurrentIndex(0)
     
-    application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
-    application.userStackedWidget.setCurrentIndex(3)
-    application.mainStackedWidget.setCurrentIndex(0)
+        else: message.displayMessageBox(4, "Erreur", "Vous ne pouvez pas configurer ce toirnois car vous n'êtes pas l'arbitre ou le créateur")
+
+def seeArbre(name, b = 0):
+    """name : nom du tournois"""
+    infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+    liste = makeRequest.arbreSTRtoLIST(infoTournoi[10])
+    participant = liste[0]
+    arbre = treeGenerator.createTree(participant)
+    if len(liste) != 1:
+        i = 1
+        while (liste[i] != [""]) and (i < len(liste)):
+            arbre = treeGenerator.defineWinners(arbre, liste[i])
+            i += 1
+
+        if (application.winnersListListWidget.count() != 0) and (b != 0):
+            liste[i] = []
+            for j in range(0, application.winnersListListWidget.count()):
+                liste[i].append(application.winnersListListWidget.item(j).text())
+            arbre = treeGenerator.defineWinners(arbre, liste[i])
+    
+    treeGenerator.drawBinaryTree(arbre, True)
+
+def addWinner(name : str):
+    """
+    name : nom du tournois
+    """
+    infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+    win = application.winnersNameLineEdit.text()
+    if win in infoTournoi[3]:
+        application.winnersListListWidget.addItem(win)
+    else: message.displayMessageBox(4, "Erreur", "Le nom du vainqueur ne figure pas dans dans la liste des participant")
+
+def delTournois(name : str):
+    if application.delTournamentGroupBox.isChecked():
+        infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+        makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
+        browseTournament()
+        application.seeMyTournamentsCheckBox.setChecked(True)
+        application.seeMyTournamentsCheckBox.setChecked(False)
+        application.delTournamentGroupBox.setChecked(False)
+
+    else: message.displayMessageBox(4, "Erreur", "La case supprimer n'est pas coché")
 
 def makePreview(list: QListWidget) -> None:
     """
@@ -248,8 +324,6 @@ def makePreview(list: QListWidget) -> None:
 def defineTournament() -> None:
     """
     Procédure qui récupère les informations du tournoi et les enregistre dans la base de donnée
-
-    MANQUE : nom du créateur
     """
     name = application.tournamentNameLineEdit.text()
     activity = application.tournamentActivityLineEdit.text()

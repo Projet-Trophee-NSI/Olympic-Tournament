@@ -44,12 +44,14 @@ class MonApplication(QMainWindow):
             self.actionAdminPanel.setVisible(False)
             for _ in range(2): self.toolBar.removeAction(self.toolBar.actions()[-1])
         
+        ## Définition des icônes (début) ##
         self.actionBrowse.setIcon(QIcon(localPath + "/../ressources/browseIcon.png"))
         self.actionCreate.setIcon(QIcon(localPath + "/../ressources/createIcon.png"))
         self.actionMyTournaments.setIcon(QIcon(localPath + "/../ressources/configureIcon.png"))
         self.actionProfile.setIcon(QIcon(localPath + "/../ressources/profileIcon.png"))
         self.actionAdminPanel.setIcon(QIcon(localPath + "/../ressources/adminPanelIcon.png"))
         self.mainIconLabel.setPixmap(QPixmap(localPath + "/../ressources/mainLogo.jpg"))
+        ## Définition des icônes (fin) ##
         
         sortingItems = ["Aucun", "Noms croissants", "Noms décroissant", "Sports croissants", "Sports décroissants", "Plus récent", "Plus ancien", "Tri personnalisé"]
         self.sortComboBox.addItems(sortingItems)
@@ -57,6 +59,7 @@ class MonApplication(QMainWindow):
         self.roleDelComboBox.addItems(["Utilisateur", "Administrateur"])
         self.accountDelComboBox.addItems(makeRequest.getListeUser())
         
+        ## Création d'un lien entre les boutons et leur action (début) ##
         self.actionBrowse.triggered.connect(browseTournament)
         self.actionCreate.triggered.connect(lambda: createTournament(1))
         self.actionMyTournaments.triggered.connect(manageMyTournaments)
@@ -74,7 +77,7 @@ class MonApplication(QMainWindow):
         self.addParticipantsPushButton.clicked.connect(lambda: addParticipants())
         self.seeTreePushButton.clicked.connect(lambda : seeArbre(self.tournamentNameLabel.text()))
         self.previewPushButton_2.clicked.connect(lambda : seeArbre(self.tournamentNameLabel.text(), 2))
-        self.delTournamentPushButton.clicked.connect(lambda : delTournois(self.tournamentNameLabel.text()))
+        self.delTournamentPushButton.clicked.connect(lambda : delTournament(self.tournamentNameLabel.text()))
         self.delLastElementPushButton.clicked.connect(lambda: self.participantsListListWidget.takeItem(self.participantsListListWidget.count() - 1))
         self.previewPushButton.clicked.connect(lambda: makePreview(self.participantsListListWidget))
         self.startDateEdit.dateChanged.connect(lambda _: self.endDateEdit.setMinimumDate(self.startDateEdit.date()))
@@ -92,6 +95,7 @@ class MonApplication(QMainWindow):
         self.verificationAddCheckBox.toggled.connect(sureToAddAdmin)
         self.verificationDelCheckBox.toggled.connect(sureToDelUserAdmin)
         self.roleDelComboBox.currentIndexChanged.connect(fillAdminPanelCombobox)
+        ## Création d'un lien entre les boutons et leur action (fin) ##
         
         self.tableWidget.setSortingEnabled(True)
         
@@ -103,12 +107,6 @@ class MonApplication(QMainWindow):
         self.iw = imageViewer.ImageViewer()
         self.verticalLayout_7.addWidget(self.iw)
         self.iw.show()
-        
-        """## TEMPORAIRE
-        self.iw.setPhoto(QPixmap(localPath + "/../tools/treePreview.png"))
-        self.verticalLayout_7.addWidget(self.iw)
-        self.iw.show()
-        ## TEMPORAIRE"""
         
         self.modifyGroupBox.hide()
         
@@ -122,7 +120,15 @@ class MonApplication(QMainWindow):
         self.ageLabel.setText(str(info[4]))
         self.usernameLabel.setText(self.userName)
         
-def tournamentClicked(item):
+def tournamentClicked(item: int) -> None:
+    """
+    Procédure qui s'exécute lorsqu'un élément de la table des tournois est cliqué.
+    Si c'est le nom d'un tournoi qui est cliqué, alors la page de la visualisation sera mise en place
+    Sinon, un filtre sera appliqué à la table.
+
+    Args:
+        item (int): élément de la table des tournois
+    """
     if(item.column() == 0):
         application.playersListWidget.clear()
         test = makeRequest.getInfoTournois(item.text())[0]
@@ -142,7 +148,10 @@ def tournamentClicked(item):
         filterTablesElements([item.text()])
         application.sortComboBox.setCurrentIndex(7)
         
-def hideTree():
+def hideTree() -> None:
+    """
+    Procédure qui gère l'affichage de l'arbre de tournoi en fonction de l'état du bouton pour Montre/cacher
+    """
     if(application.hidePushButton.isChecked()):
         application.iw.hide()
         application.hidePushButton.setText("Montrer")
@@ -150,16 +159,29 @@ def hideTree():
         application.iw.show()
         application.hidePushButton.setText("Cacher")
 
-def hideModifications(state):
+def hideModifications(state: bool) -> None:
+    """
+    Procédure qui chache ou montre le groupBox contenant les widgets permettant de modifier les informations
+    du profil.
+
+    Args:
+        state (bool): l'état du checkBox
+    """
     if(state): application.modifyGroupBox.show()
     else: application.modifyGroupBox.hide()
 
-def browseTournament():
+def browseTournament() -> None:
+    """
+    Procédure qui bascule sur la page d'exploration des tournois
+    """
     application.seeMyTournamentsCheckBox.setChecked(False)
     application.userStackedWidget.setCurrentIndex(0)
     application.mainStackedWidget.setCurrentIndex(0)
 
-def manageMyTournaments():
+def manageMyTournaments() -> None:
+    """
+    Procédure qui bascule sur la page d'exploration des tournois en cochant le checkBox 'Mes tournois'
+    """
     if(not(application.seeMyTournamentsCheckBox.isChecked())):
         application.seeMyTournamentsCheckBox.setChecked(True)
     application.userStackedWidget.setCurrentIndex(0)
@@ -186,6 +208,13 @@ def manageMyTournamentsSelect(state: bool) -> None:
         fillTournamentTable()
 
 def fillTableWidget(elements: list[list[str]]) -> None:
+    """
+    Procédure qui remplie la table des tournois dans l'application à partir d'une liste de listes de chaînes de caractères
+    contenant les informations des tournois
+
+    Args:
+        elements (list[list[str]]): la liste contenant l'ensemble des tournois et leurs informations respectives
+    """
     for i in range(len(elements)):
         application.tableWidget.insertRow(i)
         for j in range(len(elements[i])):
@@ -194,7 +223,15 @@ def fillTableWidget(elements: list[list[str]]) -> None:
             item.setForeground(QBrush(QColor(255, 255, 255)))
             application.tableWidget.setItem(i, j, item)
 
-def filterTablesElements(textList: list[str]):
+def filterTablesElements(textList: list[str]) -> None:
+    """
+    Procédure de filtre pour la table des tournois.
+    La table est filtrer en fonction des éléments de la liste 'textList'
+    passé en paramètre.
+
+    Args:
+        textList (list[str]): éléments que doivent contenir les lignes pour être affichées
+    """
     for i in range(application.tableWidget.rowCount()):
         row_match = False
         for j in range(application.tableWidget.columnCount()):
@@ -207,7 +244,20 @@ def filterTablesElements(textList: list[str]):
         # Masquer la ligne si le texte recherché n'est pas trouvé
         application.tableWidget.setRowHidden(i, not row_match)
  
-def sortTablesElements(sort: int):
+def sortTablesElements(sort: int) -> None:
+    """
+    Procédure qui tri la table des tournois en fonction d'u type de tri passé
+    en paramètre :
+    - 1 : Nom des tournois par ordre croissant
+    - 2 : Nom des tournois par ordre décroissant
+    - 3 : Nom du sport par ordre croissant
+    - 4 : Nom du sport par ordre décroissant
+    - 5 : Date de début la plus récente
+    - 6 : Date de début la plus ancienne
+
+    Args:
+        sort (int): le type de tri choisi
+    """
     if(sort == 0):
         for i in range(application.tableWidget.rowCount()):
             application.tableWidget.setRowHidden(i, False)
@@ -218,9 +268,27 @@ def sortTablesElements(sort: int):
     elif(sort == 5): application.tableWidget.sortItems(2, Qt.AscendingOrder)
     elif(sort == 6): application.tableWidget.sortItems(2, Qt.DescendingOrder)
 
-def searchTournament(searchedText: str) -> None: filterTablesElements(searchedText.split())
+def searchTournament(searchedText: str) -> None:
+    """
+    Procédure qui tri la table en fonction du contenu de la barre de recherche
+
+    Args:
+        searchedText (str): le texte de la barre de recherche
+    """
+    filterTablesElements(searchedText.split())
 
 def createTournament(mode: int, name = None) -> None:
+    """
+    Procédure qui configure la page de création de tournoi en fonction
+    de si l'utilisateur souhaite créer un tournoi ou s'il souhaite en modifier un.
+    Pour l'argument 'mode' :
+    - 1 : pour la création d'un tournoi
+    - 2 : pour la configuration d'un tournoi
+
+    Args:
+        mode (int): le mode dans lequel la page va s'ouvrir
+        name (_type_, optional): le nom du tournoi à configurer. Defaults to None.
+    """
     if(mode == 1):
         application.winnerGroupBox.hide()
         application.delTournamentGroupBox.hide()
@@ -236,6 +304,7 @@ def createTournament(mode: int, name = None) -> None:
         application.mainStackedWidget.setCurrentIndex(0)
     elif(mode == 2):
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+        print(infoTournoi)
         arb = makeRequest.convertSTRtoLst(infoTournoi[2])
         if (application.userName in arb) or (application.userName == infoTournoi[-1]):
             startDate = infoTournoi[8].split("/")
@@ -254,6 +323,7 @@ def createTournament(mode: int, name = None) -> None:
 
             for e in makeRequest.convertSTRtoLst(infoTournoi[3]):
                 application.participantsListListWidget_2.addItem(e)
+                
             application.winnerGroupBox.show()
             application.delTournamentGroupBox.show()
             application.participantsGroupBox.hide()
@@ -262,7 +332,7 @@ def createTournament(mode: int, name = None) -> None:
             application.userStackedWidget.setCurrentIndex(3)
             application.mainStackedWidget.setCurrentIndex(0)
     
-        else: message.displayMessageBox(4, "Erreur", "Vous ne pouvez pas configurer ce toirnois car vous n'êtes pas l'arbitre ou le créateur")
+        else: message.displayMessageBox(4, "Erreur", "Vous ne pouvez pas configurer ce tournoi car vous n'en pas le créateur ni l'arbitre.")
 
 def seeArbre(name, b = 0):
     """name : nom du tournois"""
@@ -290,16 +360,16 @@ def addWinner(name : str):
     """
     infoTournoi = makeRequest.getInfoTournois(str(name))[0]
     win = application.winnersNameLineEdit.text()
+    application.winnersNameLineEdit.setText("")
     if win in infoTournoi[3]:
         application.winnersListListWidget.addItem(win)
     else: message.displayMessageBox(4, "Erreur", "Le nom du vainqueur ne figure pas dans dans la liste des participant")
 
-def delTournois(name : str):
+def delTournament(name : str):
     if application.delTournamentGroupBox.isChecked():
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
         makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
         browseTournament()
-        application.seeMyTournamentsCheckBox.setChecked(True)
         application.seeMyTournamentsCheckBox.setChecked(False)
         application.delTournamentGroupBox.setChecked(False)
 
@@ -331,22 +401,34 @@ def defineTournament() -> None:
     startDate = application.startDateEdit.date().toString('dd/MM/yyyy')
     endDate = application.endDateEdit.date().toString('dd/MM/yyyy')
     participants = [application.participantsListListWidget.item(i).text() for i in range(application.participantsListListWidget.count())]
+    participants2 = [application.participantsListListWidget_2.item(i).text() for i in range(application.participantsListListWidget_2.count())]
     arbiters = [application.arbiterListWidget.item(i).text() for i in range(application.arbiterListWidget.count())]
     
-    if (len(participants) < 2):
-        message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la création est impossible.")
-
-    elif ((len(participants)%2) != 0):
-        message.displayMessageBox(4, "Manque de participants", f"Vous avez entréun nombre impaire de participants ({len(participants)}) à votre tournoi, la création est impossible.")
-
-    else:
+    if(application.createTournamentLabel.text() == "Modifier un tournoi"):
+        infoTournoi = makeRequest.getInfoTournois(str(name))[0]
+        makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
+        
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
-            message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplie, la création est impossible.")
+            message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
         else:
+            ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs
             makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
-            message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
+            message.displayMessageBox(2, "Réussite", "Modification du tournoi réussi")
+    else:    
+        if (len(participants) < 2):
+            message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la création est impossible.")
 
-    fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
+        elif ((len(participants)%2) != 0):
+            message.displayMessageBox(4, "Manque de participants", f"Vous avez entré un nombre impaire de participants ({len(participants)}) à votre tournoi, la création est impossible.")
+
+        else:
+            if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
+                message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
+            else:
+                makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
+                message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
+                
+        fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
 
 def fillTournamentTable() -> None:
     """

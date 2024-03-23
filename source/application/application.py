@@ -33,16 +33,13 @@ class MonApplication(QMainWindow):
         self.setWindowTitle("Best tournament")
         self.setWindowIcon(QIcon(localPath + "/../ressources/mainLogo.jpg"))
         
-        # Créer un widget central
-        #self.windowContent = QWidget()
-        #self.setCentralWidget(self.windowContent)
+        loadUi(localPath + "/application.ui", self) # Chargement de l'interface
         
-        # Charger l'interface utilisateur dans le widget central
-        loadUi(localPath + "/application.ui", self)
-        
+        ## Configuration de la fenêtre en fonction du type d'utilisateur (début) ##
         if(self.typeOfUser == 0):
             self.actionAdminPanel.setVisible(False)
             for _ in range(2): self.toolBar.removeAction(self.toolBar.actions()[-1])
+        ## Configuration de la fenêtre en fonction du type d'utilisateur (fin) ##
         
         ## Définition des icônes (début) ##
         self.actionBrowse.setIcon(QIcon(localPath + "/../ressources/browseIcon.png"))
@@ -99,20 +96,23 @@ class MonApplication(QMainWindow):
         
         self.tableWidget.setSortingEnabled(True)
         
+        # Remplissage des QDateTimeEdit
         self.startDateEdit.setMinimumDate(QDate.currentDate())
         self.endDateEdit.setMinimumDate(QDate.currentDate())
         
         self.onLogin()
         
+        ## Définition et configuration de l'ImageViewer (QGraphicsView modifié) (début) ##
         self.iw = imageViewer.ImageViewer()
         self.verticalLayout_7.addWidget(self.iw)
         self.iw.show()
+        ## Définition et configuration de l'ImageViewer (QGraphicsView modifié) (fin) ##
         
         self.modifyGroupBox.hide()
         
     def onLogin(self) -> None:
         """
-        Procédure qui remplit l'ensemble des labels satiques de l'application et qui dépendent seulement de l'utilisateur
+        Procédure qui remplit l'ensemble des labels statiques de l'application et qui dépendent seulement de l'utilisateur
         """
         info = makeRequest.getInfo(self.idOfUser)[0]
         self.mailLabel.setText(self.loginId)
@@ -218,7 +218,7 @@ def fillTableWidget(elements: list[list[str]]) -> None:
     for i in range(len(elements)):
         application.tableWidget.insertRow(i)
         for j in range(len(elements[i])):
-            if(j == 2) : item = QTableWidgetItem(str(datetime.strptime(elements[i][j], "%d/%m/%Y").date()))
+            if(j == 2 or j == 3) : item = QTableWidgetItem(str(datetime.strptime(elements[i][j], "%d/%m/%Y").date()))
             else: item = QTableWidgetItem(elements[i][j])
             item.setForeground(QBrush(QColor(255, 255, 255)))
             application.tableWidget.setItem(i, j, item)
@@ -232,17 +232,23 @@ def filterTablesElements(textList: list[str]) -> None:
     Args:
         textList (list[str]): éléments que doivent contenir les lignes pour être affichées
     """
-    for i in range(application.tableWidget.rowCount()):
-        row_match = False
-        for j in range(application.tableWidget.columnCount()):
-            item = application.tableWidget.item(i, j)
-            # Vérifier si l'élément contient le texte recherché
-            for e in textList:
-                if e.lower() in item.text().lower():
-                    row_match = True
-                    break
-        # Masquer la ligne si le texte recherché n'est pas trouvé
-        application.tableWidget.setRowHidden(i, not row_match)
+    if(textList != []):
+        for i in range(application.tableWidget.rowCount()):
+            row_match = False
+            for j in range(application.tableWidget.columnCount()):
+                item = application.tableWidget.item(i, j)
+                # Vérifier si l'élément contient le texte recherché
+                for e in textList:
+                    if e.lower() in item.text().lower():
+                        row_match = True
+                        break
+            # Masquer la ligne si le texte recherché n'est pas trouvé
+            application.tableWidget.setRowHidden(i, not row_match)
+        application.sortComboBox.setCurrentIndex(7)
+    else:
+        for i in range(application.tableWidget.rowCount()):
+            application.tableWidget.setRowHidden(i, False)
+        application.sortComboBox.setCurrentIndex(0)
  
 def sortTablesElements(sort: int) -> None:
     """
@@ -277,7 +283,7 @@ def searchTournament(searchedText: str) -> None:
     """
     filterTablesElements(searchedText.split())
 
-def createTournament(mode: int, name = None) -> None:
+def createTournament(mode: int, name: str = None) -> None:
     """
     Procédure qui configure la page de création de tournoi en fonction
     de si l'utilisateur souhaite créer un tournoi ou s'il souhaite en modifier un.
@@ -287,7 +293,7 @@ def createTournament(mode: int, name = None) -> None:
 
     Args:
         mode (int): le mode dans lequel la page va s'ouvrir
-        name (_type_, optional): le nom du tournoi à configurer. Defaults to None.
+        name (str, optional): le nom du tournoi à configurer. Defaults to None.
     """
     if(mode == 1):
         application.winnerGroupBox.hide()
@@ -304,7 +310,6 @@ def createTournament(mode: int, name = None) -> None:
         application.mainStackedWidget.setCurrentIndex(0)
     elif(mode == 2):
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
-        print(infoTournoi)
         arb = makeRequest.convertSTRtoLst(infoTournoi[2])
         if (application.userName in arb) or (application.userName == infoTournoi[-1]):
             startDate = infoTournoi[8].split("/")
@@ -318,6 +323,7 @@ def createTournament(mode: int, name = None) -> None:
             application.endDateEdit.setMinimumDate(endDate)
             application.startDateEdit.setDate(startDate)
             application.endDateEdit.setDate(endDate)
+            
             for e in arb:
                 application.arbiterListWidget.addItem(e)
 
@@ -334,8 +340,14 @@ def createTournament(mode: int, name = None) -> None:
     
         else: message.displayMessageBox(4, "Erreur", "Vous ne pouvez pas configurer ce tournoi car vous n'en pas le créateur ni l'arbitre.")
 
-def seeArbre(name, b = 0):
-    """name : nom du tournois"""
+def seeArbre(name: str, b: int = 0) -> None:
+    """
+    Procédure qui générère et affiche un arbre de tournoi à partir du nom du tournoi.
+
+    Args:
+        name (str): le nom du tournoi dont on veut afficher l'arbre
+        b (int, optional): valeur indiquant si l'arbre doit contenir les prochains vainqueurs. Defaults to 0.
+    """
     infoTournoi = makeRequest.getInfoTournois(str(name))[0]
     liste = makeRequest.arbreSTRtoLIST(infoTournoi[10])
     participant = liste[0]
@@ -354,9 +366,13 @@ def seeArbre(name, b = 0):
     
     treeGenerator.drawBinaryTree(arbre, True)
 
-def addWinner(name : str):
+def addWinner(name: str) -> None:
     """
-    name : nom du tournois
+    Procédure qui ajoute le nom d'un des participants à la liste des vainqueurs du prochain tour.
+    Le nom des vainqueurs doivent faire partis de ceux des participants précédent.
+
+    Args:
+        name (str): nom du tournoi
     """
     infoTournoi = makeRequest.getInfoTournois(str(name))[0]
     win = application.winnersNameLineEdit.text()
@@ -365,7 +381,13 @@ def addWinner(name : str):
         application.winnersListListWidget.addItem(win)
     else: message.displayMessageBox(4, "Erreur", "Le nom du vainqueur ne figure pas dans dans la liste des participant")
 
-def delTournament(name : str):
+def delTournament(name: str) -> None:
+    """
+    Procédure qui supprime un tournoi à partir de son nom.
+
+    Args:
+        name (str): nom du tournoi
+    """
     if application.delTournamentGroupBox.isChecked():
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
         makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
@@ -441,14 +463,11 @@ def fillTournamentTable() -> None:
         liste.append(tournois)
 
     fillTableWidget(liste)
-    
-def fillArbiterComboBox() -> None:
-    """
-    Procédure qui rempli le comboBox 'arbiterNameComboBox' contenant l'ensemble des utilisateurs à partir de la base de donnée
-    A COMPLETER
-    """
 
-def addArbiter():
+def addArbiter() -> None:
+    """
+    Procédure qui ajoute un arbitre à la liste des arbitres du tournoi.
+    """
     arbiterName = application.arbiterNameComboBox.currentText()
     if(application.arbiterNameComboBox.findText(arbiterName) != -1):
         application.arbiterListWidget.addItem(arbiterName)
@@ -457,6 +476,9 @@ def addArbiter():
                                   "n'existe pas, veuillez en choisir un dans la liste mise à votre disposition.")
 
 def addParticipants():
+    """
+    Procédure qui ajoute un participant à la liste des participants du tournoi.
+    """
     application.participantsListListWidget.addItem(application.addParticipantsLineEdit.text())
     application.addParticipantsLineEdit.setText("")
 
@@ -469,6 +491,9 @@ def seeNewPassword() -> None:
     application.changePasswordLineEdit.setEchoMode(new_mode) #modifie le mode de l'affichage de passwordLineEdit
 
 def downloadData() -> None:
+    """
+    Procédure qui crée un fichier PDF contenant les différentes données stockées en lien avec l'utilisateur.
+    """
     userName = "Nom d'utilisateur : " + application.usernameLabel.text()
     mail = "Courrier électronique : " + application.loginId
     date = "Date de création du compte : " + application.dateLabel.text()
@@ -483,11 +508,18 @@ def downloadData() -> None:
     else:
         message.displayMessageBox(3, "Enregistrement impossible", "Vos données n'ont pas pu être téléchargées car l'emplacement saisi est invalide ou inexistant.")
 
-def updateProfile(object : str, id : int)->None:
+def updateProfile(object: str, id: int) -> None:
+    """
+    Procédure qui met à jour les informations de l'utilisateur.
+
+    Args:
+        object (str): l'information à modifier
+        id (int): l'identifiant de l'utilisateur
+    """
     if object == "age":
         modif = application.changeAgeSpinBox.value()
         if makeRequest.modife_donne_user(id, modif, object) == True: application.ageLabel.setText(str(modif))
-        else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
+        else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuée")
 
     elif object == "email":
         modif = application.changeMailLineEdit.text()
@@ -527,11 +559,20 @@ def getRegisterAdmin() -> None:
         message.displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
 
 def delUserAdmin() -> None:
+    """
+    Procédure qui supprime un utilisateur/administrateur.
+    """
     table = makeRequest.getTable("User")
     for e in table:
         if(e[1] == application.accountDelComboBox.currentText()): makeRequest.suprime_donne_user(e[0])
 
 def sureToAddAdmin(state: bool) -> None:
+    """
+    Procédure qui gère le bouton pour ajouter un administrateur (couleur, fonctionnment)
+
+    Args:
+        state (bool): état de la case à cocher
+    """
     application.addPushButton.setEnabled(state)
     if(state): application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
     else: application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")    
@@ -544,6 +585,12 @@ def fillAdminPanelCombobox(index: int) -> None:
         application.accountDelComboBox.addItems(makeRequest.getListeAdmin())
 
 def sureToDelUserAdmin(state: bool) -> None:
+    """
+    Procédure qui gère le bouton pour supprimer un utilisateur/administrateur (couleur, fonctionnment)
+
+    Args:
+        state (bool): état de la case à cocher
+    """
     application.delPushButton.setEnabled(state)
     if(state): application.delPushButton.setStyleSheet("color: rgb(193, 0, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
     else: application.delPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")
@@ -567,8 +614,7 @@ if __name__ == '__main__':
     application = MonApplication(content[0], content[1], content[2], content[3])
     application.show()
     
-    fillTournamentTable()
-    #fillTableWidget([["Tournoi 1", "Tennis", "23/02/2024", "25/02/2024", "Antoine"], ["Tournoi 2", "Pétanque", "20/02/2024", "18/04/2024", "Jonathan"]]) # TEMPORAIRE
+    fillTournamentTable() # Remplissage de la table des tournois
     
     application.sortComboBox.setCurrentIndex(0)
     application.setMinimumSize(QSize(800, 400))

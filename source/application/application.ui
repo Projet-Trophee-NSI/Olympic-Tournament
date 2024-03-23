@@ -339,6 +339,9 @@ border-radius: 7px;</string>
                    <property name="frameShape">
                     <enum>QFrame::StyledPanel</enum>
                    </property>
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
                   </widget>
                  </item>
                  <item row="3" column="0">
@@ -1671,7 +1674,7 @@ border-radius: 7px;</string>
              <item>
               <widget class="QCheckBox" name="verificationAddCheckBox">
                <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
                <property name="styleSheet">
                 <string notr="true">border: 0px solid white;</string>

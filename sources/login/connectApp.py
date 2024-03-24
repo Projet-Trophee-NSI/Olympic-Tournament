@@ -162,7 +162,6 @@ def connectApp() -> None:
     """
     con = getIdPassword()
     requestResult = makeRequest.connect(con[0], hash.hash(con[1]))
-    print(requestResult)
     if requestResult[0] == True:
         tempConnectionFile = open(localPath + "/../application/temp.tmp", "w")
         tempConnectionFile.write(str(requestResult[1]) + ";" + str(requestResult[2]) + ";" + str(con[0]) + ";" + str(hash.hash(con[1])))

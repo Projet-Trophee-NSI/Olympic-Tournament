@@ -269,8 +269,9 @@ def createTournoiArbre(name: str, listIdArbitre: list[int], listParticipants: li
     cur = con.cursor()
     a = cur.execute("SELECT nom FROM TournoiArbre WHERE nom= ? ", (name,))
     a = a.fetchone()
+    nombreTour = nombersOfTurns(listParticipants)
     if a == None :
-        val = (findMinimalIdTournoiArbre(),name,convertLsttoSTR(listIdArbitre),convertLsttoSTR(listParticipants),nombersOfTurns(listParticipants),len(listParticipants),activity,despcritpion,start,end,arbreLISTtoSTR(createTree(listParticipants,nombersOfTurns(listParticipants))),createur)
+        val = (findMinimalIdTournoiArbre(),name,convertLsttoSTR(listIdArbitre),convertLsttoSTR(listParticipants),nombreTour ,len(listParticipants),activity,despcritpion,start,end,arbreLISTtoSTR(createTree(listParticipants,nombreTour)),createur)
         cur.execute("INSERT INTO TournoiArbre VALUES(?,?,?,?,?,?,?,?,?,?,?,?)", val)
         con.commit()
         con.close()
@@ -338,7 +339,10 @@ def arbreSTRtoLIST(arbreStr: str) -> list:
     while i<len(arbreStr):
         tempo+=arbreStr[i]
         if arbreStr[i]=="]":
-            arbreList.append(convertSTRtoLst(tempo))
+            if tempo != "[]":
+                arbreList.append(convertSTRtoLst(tempo))
+            else:
+                arbreList.append([])
             tempo=""
         i+=1
     return arbreList
@@ -428,7 +432,8 @@ def nombersOfTurns(participantsList: list[int]) -> int:
         int: le nombre de tours
     """
     taille=len(participantsList)
-    if mat.log2(taille)==int(mat.log2(taille)):
+    log = mat.log2(taille)
+    if log==int(mat.log2(taille)):
         return int(mat.log2(taille))+1
     return int(mat.log2(taille))+2
 

@@ -430,21 +430,34 @@ def defineTournament(aName = None) -> None:
     endDate = application.endDateEdit.date().toString('dd/MM/yyyy')
     participants = [application.participantsListListWidget.item(i).text() for i in range(application.participantsListListWidget.count())]
     participants2 = [application.participantsListListWidget_2.item(i).text() for i in range(application.participantsListListWidget_2.count())]
+    win = [application.winnersListListWidget.item(i).text() for i in range(application.winnersListListWidget.count())]
     arbiters = [application.arbiterListWidget.item(i).text() for i in range(application.arbiterListWidget.count())]
     
     if(application.createTournamentLabel.text() == "Modifier un tournoi"):
         infoTournoi = makeRequest.getInfoTournois(str(aName))[0]
-        parti = makeRequest.arbreSTRtoLIST(infoTournoi[3])
-        #makeRequest.deleteDataTournoiArbre(infoTournoi[0])
+        makeRequest.deleteDataTournoiArbre(infoTournoi[0])
+        application.seeMyTournamentsCheckBox.setChecked(True)
+        application.seeMyTournamentsCheckBox.setChecked(False)
         
         
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
         else:
             ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs  makeRequest.arbreLISTtoSTR(parti)
-            makeRequest.createTournoiArbre(name, arbiters,participants , activity, description, startDate, endDate, application.userName) #ajout nom créateur
+            makeRequest.createTournoiArbre(name, arbiters, participants2 , activity, description, startDate, endDate, application.userName) #ajout nom créateur
+            inf = makeRequest.getInfoTournois(str(name))[0]
+            abr = makeRequest.arbreSTRtoLIST(inf[10])
+            if len(win) != 0:
+                i = 1
+                while (len(abr[i]) != 0) and (len(abr) > i): i += 1
+                
+                for e in win: abr[i].append(e)
+
+            makeRequest.modifyDateTournoiArbre(inf[0], "arbre", abr)
+            inf = makeRequest.getInfoTournois(str(name))[0]
+            print(inf)
             message.displayMessageBox(2, "Réussite", "Modification du tournoi réussi")
-            fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(name)[0][1]]])
+            fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
     else:    
         if (len(participants) < 2):
             message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la création est impossible.")

@@ -301,6 +301,7 @@ def createTournament(mode: int, name: str = None) -> None:
     """
     application.arbiterListWidget.clear()
     application.participantsListListWidget_2.clear()
+    application.winnersListListWidget.clear()
 
     if(mode == 1):
         application.winnerGroupBox.hide()
@@ -359,7 +360,7 @@ def seeArbre(name: str, b: int = 0) -> None:
     arbre = treeGenerator.createTree(participant)
     if len(liste) != 1:
         i = 1
-        while (liste[i] != [""]) and (i < len(liste)):
+        while (liste[i] != []) and (i < len(liste)):
             arbre = treeGenerator.defineWinners(arbre, liste[i])
             i += 1
 

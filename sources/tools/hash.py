@@ -1,4 +1,5 @@
-import hashlib  ### importation du module hashlib
+### Importation ###
+import hashlib
 
 def hash(password: str) -> str:
     """

@@ -1,3 +1,4 @@
+### Importation ###
 from PyQt5.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QFrame
 from PyQt5.QtGui import QPixmap, QPainter, QBrush, QColor
 from PyQt5.QtCore import Qt, QRectF

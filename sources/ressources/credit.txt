@@ -7,3 +7,5 @@ Les différents fichiers concernés sont (dans le dossier /source/ressources) :
     - 'configureIcon.png'   -> https://icon-icons.com/fr/icone/pr%C3%A9f%C3%A9rences-options-r%C3%A9glage-linterface-utilisateur-la-roue-dent%C3%A9e-configuration-gear-roue-param%C3%A8tres/210824
     - 'profileIcon.png'     -> https://icon-icons.com/fr/icone/lhomme-daffaires-m%C3%A2le-lhomme-compte-les-gens-profil-personne-avatar-lutilisateur/210812
     - 'adminPanelIcon.png'  -> https://icon-icons.com/fr/icone/compte-profil-lutilisateur-avatar-lhomme-les-gens-l%C3%A9quipe-groupe-les-utilisateurs/210760
+
+Le logo principal du logiciel a été généré à l'aide d'une intelligence artificielle (DALL-E)

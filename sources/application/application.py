@@ -1,3 +1,4 @@
+### Importation ###
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QListWidget, QLineEdit, QFileDialog
 from PyQt5.QtGui import QPixmap, QIcon, QColor, QBrush
 from PyQt5.QtCore import Qt, QDate, QSize

@@ -1,3 +1,4 @@
+### Importation ###
 import sqlite3 
 import os
 import datetime as dat
@@ -6,7 +7,7 @@ import math as mat
 localPathbd = os.path.dirname(os.path.abspath(__file__))
 
 
-################# FONCTIONS GENERALES
+### Fonctions générales ###
 def getTable(name : str) -> list[tuple]:
     """
     permet de récuperer tous les attribues de la table d'un nom donné
@@ -26,7 +27,7 @@ def getTable(name : str) -> list[tuple]:
     return res
 
 
-################# FONCTIONS POUR LA TABLE User
+### Fonctions pour la table User ###
 def inscri_donne (nom: str, mdp: str, email: str, age: int, admin:int, ip : str, date: str = dat.datetime.today().strftime('%d-%m-%Y')) -> bool:
     '''
     Inscrie une nouvelle personne dans la table User
@@ -195,7 +196,7 @@ def getListeUser():
     return [e[0] for e in inf]
 
 
-################# FONCTIONS POUR LA TABLE TournoiArbre
+### Fonctions pour la table TrournoiArbre ###
 
 ## "[a/b/c/d][][][]"
 ## [[a,b,c,d,m],[],[],[]]

@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QWidget, QMessageBox
+### Importation ###
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QWidget
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.uic import loadUi
 import os

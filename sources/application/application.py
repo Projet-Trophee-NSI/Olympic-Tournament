@@ -79,7 +79,7 @@ class MonApplication(QMainWindow):
         self.delLastElementPushButton.clicked.connect(lambda: self.participantsListListWidget.takeItem(self.participantsListListWidget.count() - 1))
         self.previewPushButton.clicked.connect(lambda: makePreview(self.participantsListListWidget))
         self.startDateEdit.dateChanged.connect(lambda _: self.endDateEdit.setMinimumDate(self.startDateEdit.date()))
-        self.validateTournamentPushButton.clicked.connect(lambda: defineTournament())
+        self.validateTournamentPushButton.clicked.connect(lambda: defineTournament(self.tournamentNameLabel.text())) ##
         self.addArbiterPushButton.clicked.connect(lambda: addArbiter())
         self.delLastArbiterPushButton.clicked.connect(lambda: self.arbiterListWidget.takeItem(self.arbiterListWidget.count() - 1))
         self.seeNewPasswordPushButton.clicked.connect(lambda: seeNewPassword())
@@ -108,6 +108,9 @@ class MonApplication(QMainWindow):
         self.verticalLayout_7.addWidget(self.iw)
         self.iw.show()
         ## Définition et configuration de l'ImageViewer (QGraphicsView modifié) (fin) ##
+
+        
+        self.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
         
         self.modifyGroupBox.hide()
         
@@ -290,12 +293,15 @@ def createTournament(mode: int, name: str = None) -> None:
     de si l'utilisateur souhaite créer un tournoi ou s'il souhaite en modifier un.
     Pour l'argument 'mode' :
     - 1 : pour la création d'un tournoi
-    - 2 : pour la configuration d'un tournoi
+    - 2 : pour la configuration d'un tournoi 
 
     Args:
         mode (int): le mode dans lequel la page va s'ouvrir
         name (str, optional): le nom du tournoi à configurer. Defaults to None.
     """
+    application.arbiterListWidget.clear()
+    application.participantsListListWidget_2.clear()
+
     if(mode == 1):
         application.winnerGroupBox.hide()
         application.delTournamentGroupBox.hide()
@@ -306,7 +312,6 @@ def createTournament(mode: int, name: str = None) -> None:
         application.tournamentResumeTextEdit.setText("")
         application.participantsGroupBox.show()
         application.createTournamentLabel.setText("Créer un nouveau tournoi")
-        application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
         application.userStackedWidget.setCurrentIndex(3)
         application.mainStackedWidget.setCurrentIndex(0)
     elif(mode == 2):
@@ -335,7 +340,6 @@ def createTournament(mode: int, name: str = None) -> None:
             application.delTournamentGroupBox.show()
             application.participantsGroupBox.hide()
             application.createTournamentLabel.setText("Modifier un tournoi")
-            application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
             application.userStackedWidget.setCurrentIndex(3)
             application.mainStackedWidget.setCurrentIndex(0)
     
@@ -393,6 +397,7 @@ def delTournament(name: str) -> None:
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
         makeRequest.deleteDataTournoiArbre(infoTournoi[0])
         browseTournament()
+        application.seeMyTournamentsCheckBox.setChecked(True)
         application.seeMyTournamentsCheckBox.setChecked(False)
         application.delTournamentGroupBox.setChecked(False)
 
@@ -414,7 +419,7 @@ def makePreview(list: QListWidget) -> None:
     else:
         message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la prévisualisation est impossible.")
 
-def defineTournament() -> None:
+def defineTournament(aName = None) -> None:
     """
     Procédure qui récupère les informations du tournoi et les enregistre dans la base de donnée
     """
@@ -428,15 +433,18 @@ def defineTournament() -> None:
     arbiters = [application.arbiterListWidget.item(i).text() for i in range(application.arbiterListWidget.count())]
     
     if(application.createTournamentLabel.text() == "Modifier un tournoi"):
-        infoTournoi = makeRequest.getInfoTournois(str(name))[0]
-        makeRequest.deleteDataTournoiArbre(infoTournoi[0])
+        infoTournoi = makeRequest.getInfoTournois(str(aName))[0]
+        parti = makeRequest.arbreSTRtoLIST(infoTournoi[3])
+        #makeRequest.deleteDataTournoiArbre(infoTournoi[0])
+        
         
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
         else:
-            ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs
-            makeRequest.createTournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
+            ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs  makeRequest.arbreLISTtoSTR(parti)
+            makeRequest.createTournoiArbre(name, arbiters,participants , activity, description, startDate, endDate, application.userName) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Modification du tournoi réussi")
+            fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(name)[0][1]]])
     else:    
         if (len(participants) < 2):
             message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la création est impossible.")

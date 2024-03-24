@@ -1,3 +1,4 @@
+### Importation ###
 from fpdf import FPDF
 import os
 
@@ -5,8 +6,8 @@ localPath = os.path.dirname(os.path.abspath(__file__))
 
 def genDataPDF(datasList: list[str], filePath: str) -> None:
     """
-    Procédure qui génère un fichier au format PDF stylisé au couleur de du logiciel et qui contient l'ensemble
-    des informations présentent dans la liste 'datasList'.
+    Procédure qui génère un fichier au format PDF stylisé au couleur du logiciel et qui contient l'ensemble
+    des informations présentes dans la liste 'datasList'.
 
     Args:
         datasList (list[str]): liste contenant des chaînes de caractères, dans ce cas, cela sera les informations de l'utilisateur

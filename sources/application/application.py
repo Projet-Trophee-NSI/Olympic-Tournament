@@ -391,7 +391,7 @@ def delTournament(name: str) -> None:
     """
     if application.delTournamentGroupBox.isChecked():
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
-        makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
+        makeRequest.deleteDataTournoiArbre(infoTournoi[0])
         browseTournament()
         application.seeMyTournamentsCheckBox.setChecked(False)
         application.delTournamentGroupBox.setChecked(False)
@@ -429,13 +429,13 @@ def defineTournament() -> None:
     
     if(application.createTournamentLabel.text() == "Modifier un tournoi"):
         infoTournoi = makeRequest.getInfoTournois(str(name))[0]
-        makeRequest.suprime_donne_tournoiArbre(infoTournoi[0])
+        makeRequest.deleteDataTournoiArbre(infoTournoi[0])
         
         if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
         else:
             ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs
-            makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
+            makeRequest.createTournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
             message.displayMessageBox(2, "Réussite", "Modification du tournoi réussi")
     else:    
         if (len(participants) < 2):
@@ -448,7 +448,7 @@ def defineTournament() -> None:
             if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
                 message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
             else:
-                makeRequest.cree_TournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
+                makeRequest.createTournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
                 message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
                 
         fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
@@ -498,8 +498,8 @@ def downloadData() -> None:
     userName = "Nom d'utilisateur : " + application.usernameLabel.text()
     mail = "Courrier électronique : " + application.loginId
     date = "Date de création du compte : " + application.dateLabel.text()
-    age = "Âge : " + application.ageLabel.text()
-    ip = "Adresse IP : " + application.ipAddress
+    age = "Âge : " + application.ageLabel.text() + " ans"
+    ip = "Adresse IP : " + application.ipAddress + " (de l'appareil sur lequel le compte a été créé)"
     
     fileName, _ = QFileDialog.getSaveFileName(None,"Enregistrer mes données", "Mes donnees", "PDF Files (*.pdf)")
     
@@ -519,22 +519,22 @@ def updateProfile(object: str, id: int) -> None:
     """
     if object == "age":
         modif = application.changeAgeSpinBox.value()
-        if makeRequest.modife_donne_user(id, modif, object) == True: application.ageLabel.setText(str(modif))
+        if makeRequest.modifyUserData(id, modif, object) == True: application.ageLabel.setText(str(modif))
         else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuée")
 
     elif object == "email":
         modif = application.changeMailLineEdit.text()
-        if makeRequest.modife_donne_user(id, modif, object) == True: application.mailLabel.setText(modif)
+        if makeRequest.modifyUserData(id, modif, object) == True: application.mailLabel.setText(modif)
         else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre mail")
 
     elif object == "nom":
         modif = application.changeUsernameLineEdit.text()
-        if makeRequest.modife_donne_user(id, modif, object) == True: application.usernameLabel.setText(modif)
+        if makeRequest.modifyUserData(id, modif, object) == True: application.usernameLabel.setText(modif)
         else: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer, essayez un autre nom")
 
     elif hash.hash(application.currentPasswordLineEdit.text()) == makeRequest.getInfo(id)[0][3] and object == "mdp":
         modif = hash.hash(application.changePasswordLineEdit.text())
-        if makeRequest.modife_donne_user(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
+        if makeRequest.modifyUserData(id, modif, object) != True: message.displayMessageBox(4, "Erreur", "La modification n'a pas pu être effectuer")
 
     else: 
         message.displayMessageBox(4, "Mot de passe incorrect", "Votre mot de passe est incorrect.")
@@ -550,7 +550,7 @@ def getRegisterAdmin() -> None:
     ip = "compte créé par '" + str(getIP.getIpAddress()) + "'"
     
     if(pseudo != "" and password != "" and email != ""):
-        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 1, ip) == True:
+        if makeRequest.registerUserData(pseudo, hash.hash(password), email, age, 1, ip) == True:
             message.displayMessageBox(2, "Inscription réussie", "L'inscription est réussie, " +
                                       "vous pouvez dès maintenant donner ces identifiants au nouvel administrateur pour qu'il/elle se connecte via la page de connexion." + 
                                       "Les identifiants de connexion sont : \n- Identifiant : " + email + "\n- Mot de passe : " + password + "(à conserver secret)")
@@ -565,7 +565,7 @@ def delUserAdmin() -> None:
     """
     table = makeRequest.getTable("User")
     for e in table:
-        if(e[1] == application.accountDelComboBox.currentText()): makeRequest.suprime_donne_user(e[0])
+        if(e[1] == application.accountDelComboBox.currentText()): makeRequest.deleteUserData(e[0])
 
 def sureToAddAdmin(state: bool) -> None:
     """

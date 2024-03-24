@@ -118,7 +118,7 @@ def getRegister() -> None:
     ip = str(getIP.getIpAddress())
     
     if(pseudo != "" and password != "" and email != ""):
-        if makeRequest.inscri_donne(pseudo, hash.hash(password), email, age, 0, ip) == True:
+        if makeRequest.registerUserData(pseudo, hash.hash(password), email, age, 0, ip) == True:
             message.displayMessageBox(2, "Inscription réussie", "Votre inscription est réussie, vous pouvez dès maintenant vous connecter via la page de connexion.")
         else:
             message.displayMessageBox(4, "Erreur d'inscription", "Votre inscription a échouée, le nom d'utilisateur ou le mail est probablement déjà utilisé.")

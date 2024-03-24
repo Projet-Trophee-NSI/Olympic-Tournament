@@ -8,7 +8,10 @@ def getIpAddress() -> str:
     Returns:
         str: l'adresse IP de l'utilisateur
     """
-    url = 'https://api.ipify.org'
-    response = requests.get(url)
-    ipAddress = response.text
-    return(ipAddress)
+    ## Récupération de l'adresse IP (début) ##
+    url = 'https://api.ipify.org' # Service affichant l'adresse IP internet
+    response = requests.get(url) # Récupération du contenu de la page de l'url
+    ipAddress = response.text # Conversion de l'adresse IP en chaîne de caractère
+    ## Récupération de l'adresse IP (fin) ##
+    
+    return(ipAddress) # Renvoie de l'adresse IP

@@ -306,6 +306,7 @@ def createTournament(mode: int, name: str = None) -> None:
         application.tournamentResumeTextEdit.setText("")
         application.participantsGroupBox.show()
         application.createTournamentLabel.setText("Créer un nouveau tournoi")
+        application.arbiterNameComboBox.clear()
         application.arbiterNameComboBox.addItems(makeRequest.getListeUser() + makeRequest.getListeAdmin())
         application.userStackedWidget.setCurrentIndex(3)
         application.mainStackedWidget.setCurrentIndex(0)

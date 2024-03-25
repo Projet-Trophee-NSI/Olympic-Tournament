@@ -126,6 +126,10 @@ def getRegister() -> None:
         message.displayMessageBox(4, "Informations mal complétées", "Au moins l'un des trois champs de saisie est vide, veuillez le/les remplir pour valider votre inscription.")
 
 def sendEmail() -> None:
+    """
+    Procédure qui envoie un mail, initialement pour la récupération de mot de passe
+    (fonctionnalité en attente)
+    """
     mail = connectAppWindow.windowContent.emailLineEditPage3.text()
 
     # Paramètres du serveur SMTP

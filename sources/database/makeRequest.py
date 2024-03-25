@@ -362,14 +362,14 @@ def arbreLISTtoSTR(arbreLst: list) -> str:
         arbreStr+=convertLsttoSTR(e)
     return arbreStr
 
-def modifyDateTournoiArbre(id: int, column: str, value: str) -> bool:
+def modifyDataTournoiArbre(id: int, column: str, value: str) -> bool:
     """
     Fonction qui modifie la donnée choisie dans la table TournoiArbre
 
     Args:
         id (int): identifiant du tournoi
-        valeur (str): nouvelle valeur
         column (str): colonne à modifier
+        valeur (str): nouvelle valeur
 
     Returns:
         bool: True si la modification a été faîte

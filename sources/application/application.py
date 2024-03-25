@@ -140,14 +140,18 @@ def tournamentClicked(item: int) -> None:
         for e in equipe:
             application.playersListWidget.addItem(e)
         
-        treeGenerator.drawBinaryTree(treeGenerator.createTree(list(equipe)), False)
-        application.iw.setPhoto(QPixmap(localPath + "\\treeView.png"))
-        os.remove(localPath + "\\treeView.png")
+        #treeGenerator.drawBinaryTree(treeGenerator.createTree(list(equipe)), False)
         application.tournamentNameLabel.setText(item.text())
-        application.detailsTextEdit.setText(test[7])
+        application.detailsTextEdit.setText(str(test[7]))
         application.startLabel_2.setText(str(test[8]))
         application.endLabel_2.setText(str(test[9]))
         application.userStackedWidget.setCurrentIndex(1)
+        if(equipe[1] == []):
+            seeArbre(application.tournamentNameLabel.text(), 0, False)
+        else:
+            seeArbre(application.tournamentNameLabel.text(), 1, False)
+        application.iw.setPhoto(QPixmap(localPath + "\\treeView.png"))
+        os.remove(localPath + "\\treeView.png")
     else:
         filterTablesElements([item.text()])
         application.sortComboBox.setCurrentIndex(7)
@@ -346,7 +350,7 @@ def createTournament(mode: int, name: str = None) -> None:
     
         else: message.displayMessageBox(4, "Erreur", "Vous ne pouvez pas configurer ce tournoi car vous n'en pas le créateur ni l'arbitre.")
 
-def seeArbre(name: str, b: int = 0) -> None:
+def seeArbre(name: str, b: int = 0, viewTree: bool = True) -> None:
     """
     Procédure qui générère et affiche un arbre de tournoi à partir du nom du tournoi.
 
@@ -360,7 +364,7 @@ def seeArbre(name: str, b: int = 0) -> None:
     arbre = treeGenerator.createTree(participant)
     if len(liste) != 1:
         i = 1
-        while (liste[i] != []) and (i < len(liste)):
+        while (i < len(liste)) and (liste[i] != []):
             arbre = treeGenerator.defineWinners(arbre, liste[i])
             i += 1
 
@@ -370,7 +374,7 @@ def seeArbre(name: str, b: int = 0) -> None:
                 liste[i].append(application.winnersListListWidget.item(j).text())
             arbre = treeGenerator.defineWinners(arbre, liste[i])
     
-    treeGenerator.drawBinaryTree(arbre, True)
+    treeGenerator.drawBinaryTree(arbre, viewTree)
 
 def addWinner(name: str) -> None:
     """
@@ -440,24 +444,25 @@ def defineTournament(aName = None) -> None:
         application.seeMyTournamentsCheckBox.setChecked(True)
         application.seeMyTournamentsCheckBox.setChecked(False)
         
-        
-        if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
+        if (name == "") or (activity == "") or (description == ""):
             message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
         else:
             ### il faut ajouter ici une ligne permettant de créer l'arbre + ajouter les vainqueurs  makeRequest.arbreLISTtoSTR(parti)
             makeRequest.createTournoiArbre(name, arbiters, participants2 , activity, description, startDate, endDate, application.userName) #ajout nom créateur
-            inf = makeRequest.getInfoTournois(str(name))[0]
-            abr = makeRequest.arbreSTRtoLIST(inf[10])
+            #inf = makeRequest.getInfoTournois(str(name))[0]
+            abr = makeRequest.arbreSTRtoLIST(infoTournoi[10])
+            
             if len(win) != 0:
                 i = 1
                 while (len(abr[i]) != 0) and (len(abr) > i): i += 1
                 
                 for e in win: abr[i].append(e)
-
-            makeRequest.modifyDateTournoiArbre(inf[0], "arbre", abr)
+            
+            #makeRequest.arbreLISTtoSTR(abr)
+            
+            makeRequest.modifyDataTournoiArbre(infoTournoi[0], "arbre", abr)
             inf = makeRequest.getInfoTournois(str(name))[0]
-            print(inf)
-            message.displayMessageBox(2, "Réussite", "Modification du tournoi réussi")
+            message.displayMessageBox(2, "Réussite", "Modification du tournoi réussie")
             fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
     else:    
         if (len(participants) < 2):
@@ -467,14 +472,17 @@ def defineTournament(aName = None) -> None:
             message.displayMessageBox(4, "Manque de participants", f"Vous avez entré un nombre impaire de participants ({len(participants)}) à votre tournoi, la création est impossible.")
 
         else:
-            if (name == "") or (activity == "") or (description == "") or (len(arbiters) < 1):
+            if (name == "") or (activity == "") or (description == ""):
                 message.displayMessageBox(4,"Manque information", "Tous les champs doivent être remplis, la création est impossible.")
             else:
                 makeRequest.createTournoiArbre(name, arbiters, participants, activity, description, startDate, endDate, application.userName) #ajout nom créateur
                 message.displayMessageBox(2, "Réussite", "Création du tournoi réussi")
                 
         fillTableWidget([[name, activity, str(startDate), str(endDate), makeRequest.getInfo(content[0])[0][1]]])
-
+    
+    application.userStackedWidget.setCurrentIndex(0)
+    clearCreatePage()
+    
 def fillTournamentTable() -> None:
     """
     Procédure qui rempli le tableau contenant l'ensemble des tournois à partir de la base de données
@@ -617,6 +625,20 @@ def sureToDelUserAdmin(state: bool) -> None:
     application.delPushButton.setEnabled(state)
     if(state): application.delPushButton.setStyleSheet("color: rgb(193, 0, 0);\nbackground-color: rgb(255, 255, 255);\nborder: 2px solid white;\nborder-radius: 7px;")
     else: application.delPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")
+
+def clearCreatePage() -> None:
+    """
+    Procédure qui vide l'ensemble des widgets de la page de création/modification
+    """
+    application.tournamentNameLineEdit.setText("")
+    application.tournamentActivityLineEdit.setText("")
+    application.tournamentResumeTextEdit.setPlainText("")
+    application.startDateEdit.setMinimumDate(QDate.currentDate())
+    application.endDateEdit.setMinimumDate(QDate.currentDate())
+    application.arbiterListWidget.clear()
+    application.participantsListListWidget.clear()
+    application.participantsListListWidget_2.clear()
+    application.winnersListListWidget.clear()
 
 if __name__ == '__main__':
     app = QApplication([])

@@ -312,6 +312,8 @@ def createTournament(mode: int, name: str = None) -> None:
         application.delTournamentGroupBox.hide()
         application.startDateEdit.setMinimumDate(QDate.currentDate())
         application.endDateEdit.setMinimumDate(QDate.currentDate())
+        application.startDateEdit.setDate(QDate.currentDate())
+        application.endDateEdit.setDate(QDate.currentDate())
         application.tournamentNameLineEdit.setText("")
         application.tournamentActivityLineEdit.setText("")
         application.tournamentResumeTextEdit.setText("")
@@ -330,8 +332,6 @@ def createTournament(mode: int, name: str = None) -> None:
             application.tournamentNameLineEdit.setText(infoTournoi[1])
             application.tournamentActivityLineEdit.setText(infoTournoi[6])
             application.tournamentResumeTextEdit.setText(infoTournoi[7])
-            application.startDateEdit.setMinimumDate(startDate)
-            application.endDateEdit.setMinimumDate(endDate)
             application.startDateEdit.setDate(startDate)
             application.endDateEdit.setDate(endDate)
             
@@ -424,9 +424,12 @@ def makePreview(list: QListWidget) -> None:
     else:
         message.displayMessageBox(4, "Manque de participants", "Vous avez entré moins de 2 participants à votre tournoi, la prévisualisation est impossible.")
 
-def defineTournament(aName = None) -> None:
+def defineTournament(aName : str = None) -> None:
     """
     Procédure qui récupère les informations du tournoi et les enregistre dans la base de donnée
+
+    Args:
+        aName (str): l'ancien nom du tournoi. Defaults to None.
     """
     name = application.tournamentNameLineEdit.text()
     activity = application.tournamentActivityLineEdit.text()
@@ -506,7 +509,7 @@ def addArbiter() -> None:
         message.displayMessageBox(4, "Arbitre inconnu", "L'utilisateur que vous essayez d'ajouter en tant qu'arbitre de votre tournoi "+
                                   "n'existe pas, veuillez en choisir un dans la liste mise à votre disposition.")
 
-def addParticipants():
+def addParticipants() -> None:
     """
     Procédure qui ajoute un participant à la liste des participants du tournoi.
     """

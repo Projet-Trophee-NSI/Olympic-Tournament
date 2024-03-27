@@ -38,7 +38,7 @@ def getTable(name: str) -> list[tuple]:
 
 
 ### Fonctions pour la table User ###
-def registerUserData (name: str, password: str, email: str, age: int, admin: int, ip : str, date: str = dat.datetime.today().strftime('%d-%m-%Y')) -> bool:
+def registerUserData (name: str, password: str, email: str, age: int, admin: int, ip: str, date: str = dat.datetime.today().strftime('%d-%m-%Y')) -> bool:
     """
     Fonction qui inscrit un nouvel utilisateur/administrateur dans la table User
 

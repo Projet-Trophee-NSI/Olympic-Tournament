@@ -612,6 +612,13 @@ def sureToAddAdmin(state: bool) -> None:
     else: application.addPushButton.setStyleSheet("color: rgb(0, 135, 0);\nbackground-color: rgb(255, 255, 255);\nbackground-color: rgb(99, 99, 99);\ncolor: rgb(150, 150, 150);\nborder: 2px solid rgb(99, 99, 99);\nborder-radius: 7px;")    
 
 def fillAdminPanelCombobox(index: int) -> None:
+    """
+    Procédure qui remplit le QComboBox de la page des administrateurs avec la liste des
+    utilisateurs ou des administrateurs en fonction du paramètre passé par l'argument 'index'
+
+    Args:
+        index (int): valeur indiquant le type d'utilisateur à mettre dans le QComboBox de la page des administrateurs
+    """
     application.accountDelComboBox.clear()
     if(index == 0):
         application.accountDelComboBox.addItems(makeRequest.getListeUser())

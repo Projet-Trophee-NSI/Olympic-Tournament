@@ -35,7 +35,7 @@ Pour utiliser ce projet, exécutez le fichier principal : ```sources/main.py```
 
 ## 🧑‍💻 Auteurs
 
-- **Mattéo Delin** - [Profil GitHub](https://github.com/gredi07)
+- **Mattéo Delin** - [Profil GitHub](https://github.com/gredimiya)
 - **Lucas Sertelon** - [Profil GitHub](https://github.com/Lublyx)
 - **Antoine Nebout** - [Profil GitHub](https://github.com/AntoineNEBOUT)
 
